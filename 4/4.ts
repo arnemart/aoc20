@@ -20,7 +20,7 @@ const rules: { [key: string]: (v: string) => boolean} = {
 
 const reqFields = Object.keys(rules)
 
-type PP = {
+interface PP {
   [key: string]: string
 }
 
