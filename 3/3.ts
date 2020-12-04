@@ -1,6 +1,6 @@
-import { readFileSync } from 'fs'
+import { inputLines } from '../common'
 
-const input = readFileSync('input.txt').toString().split(/\n/).map(line => line.split('').map(c => c == '#'))
+const input = inputLines().map(line => line.split('').map(c => c == '#'))
 
 const checkSlope = (right: number, down: number) => input.reduce((state, line, y) => ({
   count: state.count + (line[state.x] && y % down == 0 ? 1 : 0),

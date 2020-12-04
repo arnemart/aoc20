@@ -1,6 +1,6 @@
-import { readFileSync } from 'fs'
+import { inputLines } from '../common'
 
-const input = readFileSync('input.txt').toString().split(/\n/).map(line => parseInt(line, 10))
+const input = inputLines().map(line => parseInt(line, 10))
 
 outer: for (let i = 0; i < input.length; i++) {
   inner: for (let j = i + 1; j < input.length; j++) {

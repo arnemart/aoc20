@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs'
+import { inputLines } from '../common'
 
 type PP = {
   [key: string]: string
@@ -29,7 +29,7 @@ const rules: { [key: string]: (v: string) => boolean} = {
 
 const reqFields = Object.keys(rules)
 
-const input: PP[] = readFileSync('input.txt').toString().split(/\n\n/).map(pp =>
+const input: PP[] = inputLines(/\n\n/).map(pp =>
   pp.split(/\s+/).reduce((p, kv) => {
     const parts = kv.split(':')
     p[parts[0]] = parts[1]
