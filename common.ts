@@ -9,7 +9,7 @@ export const within = (min: number, max: number) => (num: string | number): bool
   return n != null && n >= min && n <= max
 }
 
-export const logAndReturn = (ret: any = true) => (...args) => {
+export const logAndReturn = (ret: any = true) => (...args: any[]) => {
   console.log(...args)
   return ret
 }
