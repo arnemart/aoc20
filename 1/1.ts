@@ -2,22 +2,8 @@ import { inputLines } from '../common'
 
 const input = inputLines().map(line => parseInt(line, 10))
 
-outer: for (let i = 0; i < input.length; i++) {
-  inner: for (let j = i + 1; j < input.length; j++) {
-    if (input[i] + input[j] == 2020) {
-      console.log('Part 1:', input[i] * input[j])
-      break outer
-    }
-  }
-}
+const part1 = input.reduce((answer, n, index) => answer || input.slice(index + 1).find(n2 => n + n2 == 2020) * n || 0, 0)
+console.log('Part 1:', part1)
 
-outer2: for (let i = 0; i < input.length; i++) {
-  inner2: for (let j = i + 1; j < input.length; j++) {
-    evenInnerer: for (let k = j + 1; k < input.length; k++) {
-      if (input[i] + input[j] + input[k] == 2020) {
-        console.log('Part 2:', input[i] * input[j] * input[k])
-        break outer2
-      }
-    }
-  }
-}
+const part2 = input.reduce((answer, n, index) => answer || input.slice(index + 1).reduce((answer2, n2, index2) => answer2 || input.slice(index2).find(n3 => n3 + n2 + n == 2020) * n2 * n || 0, 0) || 0, 0)
+console.log('Part 2:', part2)
