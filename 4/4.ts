@@ -1,8 +1,5 @@
 import { inputLines, within } from '../common'
 
-type PP = {
-  [key: string]: string
-}
 const checkHgt = (v: string): boolean => {
   const matches = v.match(/^(\d+)(in|cm)$/)
   if (matches && matches[2] == 'cm') return within(150, 193)(matches[1])
@@ -22,6 +19,10 @@ const rules: { [key: string]: (v: string) => boolean} = {
 }
 
 const reqFields = Object.keys(rules)
+
+type PP = {
+  [key: string]: string
+}
 
 const input: PP[] = inputLines(/\n\n/).map(pp =>
   pp.split(/\s+/).map(s => s.split(':')).reduce((p, parts) => ({
