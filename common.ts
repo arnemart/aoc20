@@ -8,3 +8,8 @@ export const within = (min: number, max: number) => (num: string | number): bool
   const n = typeof num == 'number' ? num : parseInt(num, 10)
   return n != null && n >= min && n <= max
 }
+
+export const logAndReturn = (ret: any = true) => (...args) => {
+  console.log(...args)
+  return ret
+}
