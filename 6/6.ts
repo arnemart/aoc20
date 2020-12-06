@@ -9,7 +9,7 @@ console.log('Part 1:', part1sum)
 const part2sum = groups.map(group => {
   const groupSize = group.split(/\n/).length
   const answers = frequencies(chars(group))
-  return Array.from(answers.keys()).map(a => answers.get(a) == groupSize ? 1 : 0).reduce(sum, 0)
+  return Array.from(answers.keys()).filter(a => answers.get(a) == groupSize).length
 }).reduce(sum)
 
 console.log('Part 2:', part2sum)
