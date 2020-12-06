@@ -17,3 +17,7 @@ export const returnAndLog = (ret: any = true) => (...args: any[]) => {
   }
   return ret
 }
+
+export const sum = (sum: number = 0, n: number) => sum + n
+
+export const pluck = (key: string) => (o: { [key: string]: any }) => o[key]
