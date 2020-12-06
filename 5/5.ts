@@ -1,4 +1,4 @@
-import { inputLines } from '../common'
+import { inputLines, chars } from '../common'
 
 interface Seat {
   row: number
@@ -14,7 +14,7 @@ const itsSomeKindOfBinarySearch = ([first, ...rest]: boolean[], from: number = 0
   }
 }
 
-const seats: Seat[] = inputLines().map(line => line.split('').map(c => c == 'F' || c == 'L')).map(line => {
+const seats: Seat[] = inputLines().map(line => chars(line).map(c => c == 'F' || c == 'L')).map(line => {
   const row = itsSomeKindOfBinarySearch(line.slice(0, 7))
   const col = itsSomeKindOfBinarySearch(line.slice(7))
   return {

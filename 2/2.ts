@@ -1,5 +1,4 @@
-import { formatWithOptions } from 'util'
-import { inputLines, xor, within } from '../common'
+import { inputLines, xor, within, chars } from '../common'
 
 interface Pw {
   min: number
@@ -10,9 +9,9 @@ interface Pw {
 
 const reg = /^(\d+)-(\d+) (\w): (\w+)$/
 
-const valid1 = (pw: Pw): boolean => within(pw.min, pw.max)(pw.pw.split('').filter(l => l == pw.letter).length)
+const valid1 = (pw: Pw) => within(pw.min, pw.max)(chars(pw.pw).filter(l => l == pw.letter).length)
 
-const valid2 = (pw: Pw): boolean => xor(pw.pw.slice(pw.min - 1, pw.min) == pw.letter, pw.pw.slice(pw.max - 1, pw.max) == pw.letter)
+const valid2 = (pw: Pw) => xor(pw.pw.slice(pw.min - 1, pw.min) == pw.letter, pw.pw.slice(pw.max - 1, pw.max) == pw.letter)
 
 const input: Pw[] = inputLines().map(line => line.match(reg)).map(matches => ({
   min: parseInt(matches[1]),

@@ -1,6 +1,6 @@
-import { inputLines } from '../common'
+import { inputLines, chars } from '../common'
 
-const input = inputLines().map(line => line.split('').map(c => c == '#'))
+const input = inputLines().map(line => chars(line).map(c => c == '#'))
 
 const checkSlope = (right: number, down: number) => input.reduce((state, line, y) => ({
   count: state.count + (line[state.x] && y % down == 0 ? 1 : 0),
