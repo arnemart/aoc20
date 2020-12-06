@@ -18,6 +18,11 @@ export const returnAndLog = (ret: any = true) => (...args: any[]) => {
   return ret
 }
 
+export const chars = (s: string) => s.replace(/\n/g, '').split('')
+
 export const sum = (sum: number = 0, n: number) => sum + n
+
+export const frequencies = <Key>(list: Key[]): Map<Key, number> =>
+  list.reduce((freqs, e) => freqs.set(e, (freqs.get(e) || 0) + 1), new Map())
 
 export const pluck = (key: string) => (o: { [key: string]: any }) => o[key]
