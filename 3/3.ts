@@ -2,9 +2,9 @@ import { inputLines, chars } from '../common'
 
 const input = inputLines().map(line => chars(line).map(c => c == '#'))
 
-const checkSlope = (right: number, down: number) => input.reduce((state, line, y) => ({
-  count: state.count + (line[state.x] && y % down == 0 ? 1 : 0),
-  x: (state.x + (y % down == 0 ? right : 0)) % line.length
+const checkSlope = (right: number, down: number) => input.filter((_, y) => y % down == 0).reduce((state, line) => ({
+  count: state.count + Number(line[state.x]),
+  x: (state.x + right) % line.length
 }), {
   count: 0,
   x: 0
