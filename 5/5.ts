@@ -1,4 +1,4 @@
-import { inputLines, chars, is } from '../common'
+import { inputLines } from '../common'
 
 interface Seat {
   row: number
