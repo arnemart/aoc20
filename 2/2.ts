@@ -9,9 +9,9 @@ interface Pw {
 
 const reg = /^(\d+)-(\d+) (\w): (\w+)$/
 
-const valid1 = (pw: Pw) => within(pw.min, pw.max)(chars(pw.pw).filter(l => l == pw.letter).length)
+const valid1 = ({pw, min, max, letter}: Pw) => within(min, max)(chars(pw).filter(l => l == letter).length)
 
-const valid2 = (pw: Pw) => xor(pw.pw.charAt(pw.min - 1) == pw.letter, pw.pw.charAt(pw.max - 1) == pw.letter)
+const valid2 = ({pw, min, max, letter}: Pw) => xor(pw.charAt(min - 1) == letter, pw.charAt(max - 1) == letter)
 
 const input: Pw[] = inputLines().map(line => line.match(reg)).map(matches => ({
   min: parseInt(matches[1]),
