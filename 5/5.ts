@@ -6,18 +6,9 @@ interface Seat {
   id: number
 }
 
-const someKindOfBS = ([first, ...rest]: boolean[], from: number = 0, to: number = Math.pow(2, rest.length + 1)) => {
-  if (rest.length == 0) {
-    return first ? from : to - 1
-  } else {
-    const diff = (to - from) / 2
-    return first ? someKindOfBS(rest, from, to - diff) : someKindOfBS(rest, from + diff, to)
-  }
-}
-
-const seats: Seat[] = inputLines().map(line => chars(line).map(is('F', 'L'))).map(line => {
-  const row = someKindOfBS(line.slice(0, 7))
-  const col = someKindOfBS(line.slice(7))
+const seats: Seat[] = inputLines().map(line => line.replace(/[FL]/g, '0').replace(/[RB]/g, '1')).map(line => {
+  const row = parseInt(line.slice(0, 7), 2)
+  const col = parseInt(line.slice(7), 2)
   return {
     row,
     col,
