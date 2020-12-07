@@ -26,5 +26,3 @@ export const frequencies = <T>(list: T[]) =>
   list.reduce((freqs, e) => freqs.set(e, (freqs.get(e) || 0) + 1), new Map<T, number>())
 
 export const pluck = (key: string) => (o: { [key: string]: any }) => o[key]
-
-export const is = <T>(...[first, ...rest]: T[]) => (val: T): boolean => (val == first || (rest.length ? is(...rest)(val) : false))
