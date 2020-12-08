@@ -1,0 +1,1 @@
+It's typescript. Only one rule: no `let`, only `const`
