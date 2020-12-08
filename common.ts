@@ -8,6 +8,7 @@ type FwcResponse<T, U> = [value: T, context: U] | undefined
 declare global {
   interface Array<T> {
     findWithContext<U>(callback: FwcCallback<T, U>): FwcResponse<T, U>
+    count(callback: (value: T) => boolean): number
   }
 }
 
@@ -18,6 +19,10 @@ Array.prototype.findWithContext = function<T, U>(callback: FwcCallback<T, U>): F
       return [v, context]
     }
   }
+}
+
+Array.prototype.count = function<T>(callback: (value: T) => boolean): number {
+  return this.filter(callback).length
 }
 
 export const inputLines = (splitWith: RegExp = /\n/) => readFileSync('input.txt').toString().split(splitWith)

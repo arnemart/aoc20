@@ -9,7 +9,7 @@ interface Pw {
 
 const pwreg = /^(\d+)-(\d+) (\w): (\w+)$/
 
-const valid1 = ({pw, min, max, letter}: Pw) => within(min, max)(chars(pw).filter(l => l == letter).length)
+const valid1 = ({pw, min, max, letter}: Pw) => within(min, max)(chars(pw).count(l => l == letter))
 
 const valid2 = ({pw, min, max, letter}: Pw) => xor(pw.charAt(min - 1) == letter, pw.charAt(max - 1) == letter)
 
@@ -20,5 +20,5 @@ const input: Pw[] = inputLines().map(l => l.match(pwreg)).map(([_, min, max, let
   pw
 }))
 
-console.log('Part 1:', input.filter(valid1).length)
-console.log('Part 2:', input.filter(valid2).length)
+console.log('Part 1:', input.count(valid1))
+console.log('Part 2:', input.count(valid2))
