@@ -60,17 +60,17 @@ const runProgram = (program: Program, seenInstructions = new Set<number>(), mach
 
 console.log('Part 1:', runProgram(input).accumulator)
 
-const fixedPrograms: Program[] = input.reduce((programs, ins, i) => {
-  if (ins.type == 'jmp' || ins.type == 'nop') {
-    const newProgram = input.slice()
-    newProgram[i] = {
-      ...ins,
-      type: (ins.type == 'jmp' ? 'nop' : 'jmp')
-    }
-    programs.push(newProgram)
+const fixedPrograms: Program[] = input
+.map((ins, i) => ({ins, i}))
+.filter(({ins: {type}}) => type == 'jmp' || type == 'nop')
+.map(({ins, i}) => {
+  const newProgram = input.slice()
+  newProgram[i] = {
+    ...ins,
+    type: (ins.type == 'jmp' ? 'nop' : 'jmp')
   }
-  return programs
-}, [])
+  return newProgram
+})
 
 const [_, machineThatTerminates] = fixedPrograms.findWithContext(program => {
   const m = runProgram(program)
