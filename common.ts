@@ -12,15 +12,13 @@ declare global {
 }
 
 Array.prototype.findWithContext = function<T, U>(callback: FwcCallback<T, U>): FwcResponse<T, U> {
-  let i = 0
-  for (const v of this) {
-    const [found, context] = callback(v, i++)
+  for (const [i, v] of this.map((v: T, i: number) => [i, v])) {
+    const [found, context] = callback(v, i)
     if (found) {
       return [v, context]
     }
   }
 }
-
 
 export const inputLines = (splitWith: RegExp = /\n/) => readFileSync('input.txt').toString().split(splitWith)
 
