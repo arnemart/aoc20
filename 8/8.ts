@@ -5,14 +5,16 @@ const input = parseProgram(inputLines())
 
 console.log('Part 1:', runProgram(input).accumulator)
 
+const swapTypes = { 'jmp': 'nop', 'nop': 'jmp'}
+
 const fixedPrograms: Program[] = input
 .map((ins, i) => ({ins, i}))
-.filter(({ins: {type}}) => type == 'jmp' || type == 'nop')
+.filter(({ins: {type}}) => type in swapTypes)
 .map(({ins, i}) => {
   const newProgram = input.slice()
   newProgram[i] = {
     ...ins,
-    type: (ins.type == 'jmp' ? 'nop' : 'jmp')
+    type: swapTypes[ins.type]
   }
   return newProgram
 })
