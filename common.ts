@@ -9,6 +9,7 @@ declare global {
   interface Array<T> {
     findWithContext<U>(callback: FwcCallback<T, U>): FwcResponse<T, U>
     count(callback: (value: T) => boolean): number
+    frequencies(): Map<T, number>
     sum(): number
     product(): number
   }
@@ -25,6 +26,10 @@ Array.prototype.findWithContext = function<T, U>(callback: FwcCallback<T, U>): F
 
 Array.prototype.count = function<T>(callback: (value: T) => boolean): number {
   return this.filter(callback).length
+}
+
+Array.prototype.frequencies = function<T>(): Map<T, number> {
+  return this.reduce((freqs: Map<T, number>, e: T) => freqs.set(e, (freqs.get(e) || 0) + 1), new Map<T, number>())
 }
 
 Array.prototype.sum = function(): number {
@@ -45,8 +50,5 @@ export const within = (min: number, max: number) => (num: string | number): bool
 }
 
 export const chars = (s: string) => s.replace(/\n/g, '').split('')
-
-export const frequencies = <T>(list: T[]) =>
-  list.reduce((freqs, e) => freqs.set(e, (freqs.get(e) || 0) + 1), new Map<T, number>())
 
 export const pluck = (key: string) => (o: { [key: string]: any }) => o[key]
