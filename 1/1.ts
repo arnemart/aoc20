@@ -1,6 +1,6 @@
 import { inputLines } from '../common'
 
-const input = inputLines().map(line => parseInt(line, 10)).sort((a, b) => a - b)
+const input = inputLines().numbers().sortNumeric()
 
 const part1numbers = input.findWithContext((n, i) => {
   const v = input.slice(i + 1).find(n2 => n + n2 == 2020)

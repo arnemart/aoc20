@@ -1,6 +1,6 @@
 import { inputLines } from '../common'
 
-const input = inputLines().map(s => parseInt(s, 10))
+const input = inputLines().numbers()
 
 const findNotASum = (list: number[], preamble: number): number => list.slice(preamble).find((num, i) => {
   const prev25 = list.slice(i, i + preamble)

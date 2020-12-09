@@ -10,6 +10,8 @@ declare global {
     findWithContext<U>(callback: FwcCallback<T, U>): FwcResponse<T, U>
     count(callback: (value: T) => boolean): number
     frequencies(): Map<T, number>
+    numbers(radix?: number): number[]
+    sortNumeric(options?: { reverse: boolean }): T[]
     sum(): number
     product(): number
   }
@@ -30,6 +32,14 @@ Array.prototype.count = function<T>(callback: (value: T) => boolean): number {
 
 Array.prototype.frequencies = function<T>(): Map<T, number> {
   return this.reduce((freqs: Map<T, number>, e: T) => freqs.set(e, (freqs.get(e) || 0) + 1), new Map<T, number>())
+}
+
+Array.prototype.numbers = function(radix: number = 10): number[] {
+  return this.map((s: any) => parseInt(s, radix))
+}
+
+Array.prototype.sortNumeric = function({ reverse }: { reverse: boolean } = { reverse: false }): number[] {
+  return this.sort((a: number, b: number) => reverse ? b - a : a - b)
 }
 
 Array.prototype.sum = function(): number {

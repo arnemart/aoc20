@@ -1,6 +1,6 @@
 import { inputLines } from '../common'
 
-const seats: number[] = inputLines().map(line => parseInt(line.replace(/[FL]/g, '0').replace(/[RB]/g, '1'), 2)).sort((a, b) => b - a)
+const seats: number[] = inputLines().map(line => line.replace(/[FL]/g, '0').replace(/[RB]/g, '1')).numbers(2).sortNumeric({ reverse: true })
 
 console.log('Part 1:', seats[0])
 
