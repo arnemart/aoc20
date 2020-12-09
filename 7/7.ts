@@ -1,4 +1,4 @@
-import { inputLines, sum } from '../common'
+import { inputLines } from '../common'
 
 class Bag {
   color: string
@@ -30,7 +30,7 @@ class Bag {
   }
 
   countBags(): number {
-    return Array.from(this.bagsInsideThisBag).map(([bag, count]) => count + bag.countBags() * count).reduce(sum, 0)
+    return Array.from(this.bagsInsideThisBag).map(([bag, count]) => count + bag.countBags() * count).sum()
   }
 }
 

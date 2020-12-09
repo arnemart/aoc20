@@ -1,4 +1,4 @@
-import { inputLines, product } from '../common'
+import { inputLines } from '../common'
 
 const input = inputLines().map(line => parseInt(line, 10)).sort((a, b) => a - b)
 
@@ -7,7 +7,7 @@ const part1numbers = input.findWithContext((n, i) => {
   return [v != null, v]
 })
 
-console.log('Part 1:', product(part1numbers))
+console.log('Part 1:', part1numbers.product())
 
 const part2numbers = input.findWithContext((n, i) => {
   const v = input.slice(i + 1).findWithContext((n2, j) => {
@@ -17,4 +17,4 @@ const part2numbers = input.findWithContext((n, i) => {
   return [v != null, v]
 }).flat()
 
-console.log('Part 2:', product(part2numbers))
+console.log('Part 2:', part2numbers.product())

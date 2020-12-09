@@ -1,4 +1,4 @@
-import { inputLines, sum } from '../common'
+import { inputLines } from '../common'
 
 const input = inputLines().map(s => parseInt(s, 10))
 
@@ -11,7 +11,7 @@ console.log('Part 1:', notASum)
 
 const findRange = (i: number, sumToFind: number, length = 1): number[] => {
   const range = input.slice(i, i + length)
-  const rsum = range.reduce(sum)
+  const rsum = range.sum()
   if (rsum < sumToFind) {
     return findRange(i, sumToFind, length + 1)
   } else if (rsum == sumToFind) {
