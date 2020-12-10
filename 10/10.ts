@@ -1,7 +1,7 @@
 import { inputLines } from '../common'
 
-const joltages = inputLines().numbers().sortNumeric()
-joltages.push(joltages[joltages.length - 1] + 3)
+const inputJoltages = inputLines().numbers().sortNumeric()
+const joltages = [...inputJoltages, inputJoltages.last() + 3]
 
 const { ones, threes, runs } = joltages
 .zip([0, ...joltages])

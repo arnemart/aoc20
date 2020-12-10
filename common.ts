@@ -15,6 +15,7 @@ declare global {
     sum(): number
     product(): number
     zip<U>(other: U[]): [T, U][]
+    last(): T
   }
 }
 
@@ -53,6 +54,10 @@ Array.prototype.product = function(): number {
 
 Array.prototype.zip = function<T, U>(other: U[]): [T, U][] {
   return this.map((v: T, i: number) => [v, other[i]])
+}
+
+Array.prototype.last = function<T>(): T {
+  return this[this.length - 1]
 }
 
 export const inputLines = (splitWith: RegExp = /\n/) => readFileSync('input.txt').toString().split(splitWith)
