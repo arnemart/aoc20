@@ -1,14 +1,19 @@
-import { inputLines, chars } from '../common'
+import { inputLines, chars, $, map, filter, reduce, pluck } from '../common'
 
-const input = inputLines().map(line => chars(line).map(c => c == '#'))
+const input = $(inputLines(), map(chars), map(map(c => c == '#')))
 
-const checkSlope = (right: number, down: number) => input.filter((_, y) => y % down == 0).reduce((state, line) => ({
-  count: state.count + Number(line[state.x]),
-  x: (state.x + right) % line.length
-}), {
-  count: 0,
-  x: 0
-}).count
+const checkSlope = (right: number, down: number) => $(
+  input,
+  filter((_, y) => y % down == 0),
+  reduce((state, line) => ({
+    count: state.count + Number(line[state.x]),
+    x: (state.x + right) % line.length
+  }), {
+    count: 0,
+    x: 0
+  }),
+  pluck('count')
+)
 
 console.log('Part 1:', checkSlope(3, 1))
 

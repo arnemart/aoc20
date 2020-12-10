@@ -2,73 +2,61 @@ import { readFileSync } from 'fs'
 
 process.chdir(require.main.path)
 
-type FwcCallback<T, U> = (value: T, i: number) => [found: boolean, context: U]
-type FwcResponse<T, U> = [value: T, context: U] | undefined
+export const inputLines = (splitWith: RegExp = /\n/) => readFileSync('input.txt').toString().split(splitWith)
 
-declare global {
-  interface Array<T> {
-    findWithContext<U>(callback: FwcCallback<T, U>): FwcResponse<T, U>
-    count(callback: (value: T) => boolean): number
-    frequencies(): Map<T, number>
-    numbers(radix?: number): number[]
-    sortNumeric(options?: { reverse: boolean }): T[]
-    sum(): number
-    product(): number
-    zip<U>(other: U[]): [T, U][]
-    last(): T
-  }
+export const xor = (a: boolean, b: boolean) => (a && !b) || (!a && b)
+
+type CF<A, B> = (a: A) => B
+export function $<A>(v: A): A
+export function $<A, B>(v: A, fn1: CF<A, B>): B
+export function $<A, B, C>(v: A, fn1: CF<A, B>, fn2: CF<B, C>): C
+export function $<A, B, C, D>(v: A, fn1: CF<A, B>, fn2: CF<B, C>, fn3: CF<C, D>): D
+export function $<A, B, C, D, E>(v: A, fn1: CF<A, B>, fn2: CF<B, C>, fn3: CF<C, D>, fn4: CF<D, E>): E
+export function $<A, B, C, D, E, F>(v: A, fn1: CF<A, B>, fn2: CF<B, C>, fn3: CF<C, D>, fn4: CF<D, E>, fn5: CF<E, F>): F
+export function $(v: any, ...fns: CF<any, any>[]) {
+  return fns.filter(fn => fn != null).reduce((v, fn) => fn(v), v)
 }
 
-Array.prototype.findWithContext = function<T, U>(callback: FwcCallback<T, U>): FwcResponse<T, U> {
-  for (const [i, v] of this.map((v: T, i: number) => [i, v])) {
+export function pipe(fn1?: CF<any, any>, fn2?: CF<any, any>, fn3?: CF<any, any>, fn4?: CF<any, any>, fn5?: CF<any, any>) {
+  return (v: any) => $(v, fn1, fn2, fn3, fn4, fn5)
+}
+
+export const map = <T, U>(fn: (v: T, i: number, arr: T[]) => U) => (arr: T[]): U[] => arr.map(fn)
+export const forEach = <T>(fn: (v: T, i: number, arr: T[]) => void) => (arr: T[]): void => arr.forEach(fn)
+export const filter = <T>(fn: (v: T, i: number, arr: T[]) => boolean) => (arr: T[]): T[] => arr.filter(fn)
+export const some = <T>(fn: (v: T, i: number, arr: T[]) => boolean) => (arr: T[]): boolean => arr.some(fn)
+export const every = <T>(fn: (v: T, i: number, arr: T[]) => boolean) => (arr: T[]): boolean => arr.every(fn)
+export const reduce = <T, U>(fn: (agg: U, val: T, i: number, arr: T[]) => U, init: U) => (arr: T[]): U => arr.reduce(fn, init)
+export const find = <T>(fn: (v: T, i: number, arr: T[]) => boolean) => (arr: T[]): T => arr.find(fn)
+export const findWithContext = <T, U>(callback: (value: T, i: number) => [found: boolean, context: U]) => (arr: T[]): [value: T, context: U] | undefined => {
+  for (const {v, i} of $(arr, map((v, i) => ({v, i})))) {
     const [found, context] = callback(v, i)
     if (found) {
       return [v, context]
     }
   }
 }
-
-Array.prototype.count = function<T>(callback: (value: T) => boolean): number {
-  return this.filter(callback).length
-}
-
-Array.prototype.frequencies = function<T>(): Map<T, number> {
-  return this.reduce((freqs: Map<T, number>, e: T) => freqs.set(e, (freqs.get(e) || 0) + 1), new Map<T, number>())
-}
-
-Array.prototype.numbers = function(radix: number = 10): number[] {
-  return this.map((s: any) => parseInt(s, radix))
-}
-
-Array.prototype.sortNumeric = function({ reverse }: { reverse: boolean } = { reverse: false }): number[] {
-  return this.sort((a: number, b: number) => reverse ? b - a : a - b)
-}
-
-Array.prototype.sum = function(): number {
-  return this.reduce((s: number, n: number) => s + n, 0)
-}
-
-Array.prototype.product = function(): number {
-  return this.reduce((p: number, n: number) => p * n, 1)
-}
-
-Array.prototype.zip = function<T, U>(other: U[]): [T, U][] {
-  return this.map((v: T, i: number) => [v, other[i]])
-}
-
-Array.prototype.last = function<T>(): T {
-  return this[this.length - 1]
-}
-
-export const inputLines = (splitWith: RegExp = /\n/) => readFileSync('input.txt').toString().split(splitWith)
-
-export const xor = (a: boolean, b: boolean) => (a && !b) || (!a && b)
-
+export const slice = <T>(start: number, end?: number) => (arr: T[]): T[] => arr.slice(start, end)
+export const sum = (nums: number[]): number => nums.reduce((s, n) => s + n, 0)
+export const product = (nums: number[]): number => nums.reduce((p, n) => p * n, 1)
+export const zipWith = <T, U>(other: U[]) => (arr: T[]): [T, U][] => arr.map((v: T, i: number) => [v, other[i]])
+export const last = <T>(arr: T[]): T => arr[arr.length - 1]
+export const numbers = (radix: number = 10) => (arr: string[]): number[] => arr.map(s => parseInt(s, radix))
+export const length = <T>(arr: T[]): number => arr.length
+export const count = <T>(fn: (v: T) => boolean) => (arr: T[]) => arr.filter(fn).length
 export const within = (min: number, max: number) => (num: string | number): boolean => {
   const n = typeof num == 'number' ? num : parseInt(num, 10)
   return n != null && n >= min && n <= max
 }
-
 export const chars = (s: string) => s.replace(/\n/g, '').split('')
-
-export const pluck = (key: string) => (o: { [key: string]: any }) => o[key]
+export const pluck = (key: string ) => (o: { [key: string]: any }) => o[key]
+export const sortNumeric = ({ reverse }: { reverse: boolean } = { reverse: false }) => (arr: number[]): number[] => arr.sort((a: number, b: number) => reverse ? b - a : a - b)
+export const match = (reg: RegExp) => (s: string): RegExpMatchArray => s.match(reg)
+export const split = (sep: RegExp | string) => (s: string): string[] => s.split(sep)
+export const replace = (fnd: RegExp | string, rep: string = '') => (s: string): string => s.replace(fnd, rep)
+export const flatten = (arr: any): any[] => arr.flat()
+export const frequencies = <T>(arr: T[]): Map<T, number> => arr.reduce((freqs: Map<T, number>, e: T) => freqs.set(e, (freqs.get(e) || 0) + 1), new Map<T, number>())
+export const values = <K, V>(m: { [key: string]: V } | Map<K, V> | Set<V>) => (m instanceof Map || m instanceof Set) ? Array.from(m.values()) : Object.keys(m)
+export const keys = <K, V>(m: Map<K, V> ) => Array.from(m.keys())
+export const entries = <K, V>(m: Map<K, V>): [K, V][] => Array.from(m.entries())
+export const into = (s: { new(...args: any[]): any; }) => (val: any) => new s(val)

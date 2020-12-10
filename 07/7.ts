@@ -1,4 +1,4 @@
-import { inputLines } from '../common'
+import { inputLines, $, entries, split, map, forEach, filter, sum, keys, match, some } from '../common'
 
 class Bag {
   color: string
@@ -26,30 +26,30 @@ class Bag {
   }
 
   canContain(bag: Bag): boolean {
-    return this.bagsInsideThisBag.has(bag) || Array.from(this.bagsInsideThisBag.keys()).some(b => b.canContain(bag))
+    return this.bagsInsideThisBag.has(bag) || $(this.bagsInsideThisBag, keys, some(b => b.canContain(bag)))
   }
 
   countBags(): number {
-    return Array.from(this.bagsInsideThisBag).map(([bag, count]) => count + bag.countBags() * count).sum()
+    return $(this.bagsInsideThisBag, entries, map(([bag, count]) => count + bag.countBags() * count), sum)
   }
 }
 
 const bagreg = /^((\d) )?([\w\s]+) bags?\.?$/
 
-inputLines().forEach(line => {
+$(inputLines(), forEach(line => {
   const parts = line.split(' contain ')
   const bagColor = parts[0].match(bagreg)[3]
   const thisBag = Bag.getBag(bagColor)
-  parts[1].split(', ').map(b => b.match(bagreg)).forEach(matches => {
+  $(parts[1], split(', '), map(match(bagreg)), forEach(matches => {
     if (matches && matches[3] != 'no other') {
       const bag = Bag.getBag(matches[3])
       thisBag.add(bag, parseInt(matches[1]))
     }
-  })
-})
+  }))
+}))
 
 const myBag = Bag.getBag('shiny gold')
 
-console.log('Part 1:', Bag.allBags().filter(bag => bag.canContain(myBag)).length)
+console.log('Part 1:', $(Bag.allBags(), filter(bag => bag.canContain(myBag))).length)
 
 console.log('Part 2:', myBag.countBags())

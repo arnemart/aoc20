@@ -1,3 +1,5 @@
+import { $, map, match } from './common'
+
 interface Instruction {
   type: 'acc' | 'jmp' | 'nop',
   val: number
@@ -14,10 +16,10 @@ interface Machine {
 
 const insreg = /^(acc|jmp|nop) ([+-]\d+)$/
 
-export const parseProgram = (lines: string[]): Program => lines.map(line => line.match(insreg)).map(matches => ({
+export const parseProgram = (lines: string[]): Program => $(lines, map(match(insreg)), map(matches => ({
   type: matches[1],
   val: parseInt(matches[2])
-} as Instruction))
+} as Instruction)))
 
 const step = (m: Machine): Machine => {
   if (m.counter == m.program.length) {
