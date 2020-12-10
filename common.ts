@@ -14,6 +14,7 @@ declare global {
     sortNumeric(options?: { reverse: boolean }): T[]
     sum(): number
     product(): number
+    zip<U>(other: U[]): [T, U][]
   }
 }
 
@@ -48,6 +49,10 @@ Array.prototype.sum = function(): number {
 
 Array.prototype.product = function(): number {
   return this.reduce((p: number, n: number) => p * n, 1)
+}
+
+Array.prototype.zip = function<T, U>(other: U[]): [T, U][] {
+  return this.map((v: T, i: number) => [v, other[i]])
 }
 
 export const inputLines = (splitWith: RegExp = /\n/) => readFileSync('input.txt').toString().split(splitWith)
