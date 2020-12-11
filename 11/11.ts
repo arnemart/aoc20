@@ -1,4 +1,3 @@
-import { setMaxListeners } from 'process'
 import { $, inputLines, map, reduce, split, getIn, cond, join, flatten, length, filter, count } from '../common'
 
 type Seat = ('L' | '#' | '.')
