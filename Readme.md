@@ -1,1 +1,1 @@
-It's typescript. Only one rule: no `let`, only `const`
+Did you ever wish typescript were more like lisp? Well, this is your lucky day, weirdo
