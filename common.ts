@@ -73,11 +73,8 @@ export const cond = <T, U>(o: [T | T[], any][]) => (v: T): U => {
   }
 }
 export const join = <T>(joinWith: string = '') => (arr: T[]): string => arr.join(joinWith)
-export const spy = <T>(v: T): T => {
-  console.log(v)
-  return v
-}
 export const spyWith = <T>(fn: (v: T) => any) => (v: T): T => {
   fn(v)
   return v
 }
+export const spy = spyWith(console.log)
