@@ -52,7 +52,7 @@ export const chars = (s: string) => s.replace(/\n/g, '').split('')
 export const pluck = (key: string ) => (o: { [key: string]: any }) => o[key]
 export const sortNumeric = ({ reverse }: { reverse: boolean } = { reverse: false }) => (arr: number[]): number[] => arr.sort((a: number, b: number) => reverse ? b - a : a - b)
 export const match = (reg: RegExp) => (s: string): RegExpMatchArray => s.match(reg)
-export const split = (sep: RegExp | string) => (s: string): string[] => s.split(sep)
+export const split = (sep: RegExp | string = '') => (s: string): string[] => s.split(sep)
 export const replace = (fnd: RegExp | string, rep: string = '') => (s: string): string => s.replace(fnd, rep)
 export const flatten = (arr: any): any[] => arr.flat()
 export const frequencies = <T>(arr: T[]): Map<T, number> => arr.reduce((freqs: Map<T, number>, e: T) => freqs.set(e, (freqs.get(e) || 0) + 1), new Map<T, number>())
@@ -60,3 +60,24 @@ export const values = <K, V>(m: { [key: string]: V } | Map<K, V> | Set<V>) => (m
 export const keys = <K, V>(m: Map<K, V> ) => Array.from(m.keys())
 export const entries = <K, V>(m: Map<K, V>): [K, V][] => Array.from(m.entries())
 export const into = (s: { new(...args: any[]): any; }) => (val: any) => new s(val)
+export const getIn = (...keys: (string | number)[]) => (val: any[] | { [key: string]: any }): any => keys.reduce((o, key) => o && o[key] ? o[key] : null, val)
+export const cond = <T, U>(o: [T | T[], any][]) => (v: T): U => {
+  const hit = o.find(e => e[0] instanceof Array ? e[0].some(ee => ee == v) : e[0] == v)
+  if (!hit) {
+    throw new Error(`Missing condition: ${v}`)
+  }
+  if (typeof hit[1] == 'function') {
+    return hit[1](v)
+  } else {
+    return hit[1]
+  }
+}
+export const join = <T>(joinWith: string = '') => (arr: T[]): string => arr.join(joinWith)
+export const spy = <T>(v: T): T => {
+  console.log(v)
+  return v
+}
+export const spyWith = <T>(fn: (v: T) => any) => (v: T): T => {
+  fn(v)
+  return v
+}
