@@ -61,12 +61,12 @@ export const keys = <K, V>(m: Map<K, V> ) => Array.from(m.keys())
 export const entries = <K, V>(m: Map<K, V>): [K, V][] => Array.from(m.entries())
 export const into = (s: { new(...args: any[]): any; }) => (val: any) => new s(val)
 export const getIn = (...keys: (string | number)[]) => (val: any[] | { [key: string]: any }): any => keys.reduce((o, key) => o && o[key] ? o[key] : null, val)
-export const cond = <T, U>(o: [T | T[], any][]) => (v: T): U => {
+export const cond = <T, U>(o: [T | T[], U | ((v: T) => U)][]) => (v: T): U => {
   const hit = o.find(e => e[0] instanceof Array ? e[0].some(ee => ee == v) : e[0] == v)
   if (!hit) {
     throw new Error(`Missing condition: ${v}`)
   }
-  if (typeof hit[1] == 'function') {
+  if (hit[1] instanceof Function) {
     return hit[1](v)
   } else {
     return hit[1]
@@ -77,4 +77,4 @@ export const spyWith = <T>(fn: (v: T) => any) => (v: T): T => {
   fn(v)
   return v
 }
-export const spy = spyWith(console.log)
+export const spy: <T>(v: T) => T = spyWith(console.log)
