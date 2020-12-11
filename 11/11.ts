@@ -37,8 +37,7 @@ const countAdj2: CountAdjFn = (seats, x, y) => $(
 const step = (n: number, countAdjFn: CountAdjFn) => (seats: SeatMap): SeatMap => $(
   seats,
   map((row, y) => $(row,
-    map((seat, x) => $(
-      seat,
+    map((seat, x) => $(seat,
       cond([
         ['.', '.'],
         ['L', countAdjFn(seats, x, y) == 0 ? '#' : 'L'],
