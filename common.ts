@@ -43,6 +43,9 @@ export const zipWith = <T, U>(other: U[]) => (arr: T[]): [T, U][] => arr.map((v:
 export const last = <T>(arr: T[]): T => arr[arr.length - 1]
 export const numbers = (radix: number = 10) => (arr: string[]): number[] => arr.map(s => parseInt(s, radix))
 export const length = <T>(arr: T[]): number => arr.length
+export const indexOf = <T>(v: T) => (arr: T[]): number => arr.indexOf(v)
+export const next = <T>(i: number, amt: number = 1) => (arr: T[]): T => arr[(i + arr.length + (amt % arr.length)) % arr.length]
+export const prev = <T>(i: number, amt: number = 1): ((arr: T[]) => T) => prev(i, -amt)
 export const count = <T>(fn: (v: T) => boolean) => (arr: T[]) => arr.filter(fn).length
 export const within = (min: number, max: number) => (num: string | number): boolean => {
   const n = typeof num == 'number' ? num : parseInt(num, 10)
