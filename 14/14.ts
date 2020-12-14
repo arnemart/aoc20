@@ -1,4 +1,4 @@
-import { $, cond, filter, flatten, inputLines, join, leftPad, map, match, number, numbers, pluck, reduce, slice, sort, split, spy, spyWith, sum, values, zipWith } from '../common'
+import { $, cond, flatten, inputLines, join, leftPad, map, match, number, pluck, reduce, slice, split, sum, values, zipWith } from '../common'
 
 const reg = /^(mask|mem)(\[(\d+)\])? = ([0-9X]+)$/
 
