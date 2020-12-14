@@ -6,17 +6,17 @@ type MaskCmd = { type: 'mask', mask: string[] }
 type MemCmd  = { type: 'mem', pos: number, val: number }
 type Cmd = MaskCmd | MemCmd
 
-const input: Cmd[] = $(inputLines(), map(match(reg)), map(matches => {
-  if (matches[1] == 'mask') {
+const input: Cmd[] = $(inputLines(), map(match(reg)), map(([_0, type, _2, pos, val]) => {
+  if (type == 'mask') {
     return {
       type: 'mask',
-      mask: $(matches[4], split())
+      mask: $(val, split())
     } as MaskCmd
   } else {
     return {
       type: 'mem',
-      pos: $(matches[3], number()),
-      val: $(matches[4], number())
+      pos: $(pos, number()),
+      val: $(val, number())
     } as MemCmd
   }
 }))
