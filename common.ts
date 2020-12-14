@@ -21,13 +21,13 @@ export function pipe(fn1?: CF<any, any>, fn2?: CF<any, any>, fn3?: CF<any, any>,
   return (v: any) => $(v, fn1, fn2, fn3, fn4, fn5)
 }
 
-export const map = <T, U>(fn: (v: T, i: number, arr: T[]) => U) => (arr: T[]): U[] => arr.map(fn)
-export const forEach = <T>(fn: (v: T, i: number, arr: T[]) => void) => (arr: T[]): void => arr.forEach(fn)
-export const filter = <T>(fn: (v: T, i: number, arr: T[]) => boolean) => (arr: T[]): T[] => arr.filter(fn)
-export const some = <T>(fn: (v: T, i: number, arr: T[]) => boolean) => (arr: T[]): boolean => arr.some(fn)
-export const every = <T>(fn: (v: T, i: number, arr: T[]) => boolean) => (arr: T[]): boolean => arr.every(fn)
+export const map    = <T, U>(fn: (v: T, i: number, arr: T[]) => U)       => (arr: T[]): U[]     => arr.map(fn)
+export const forEach   = <T>(fn: (v: T, i: number, arr: T[]) => void)    => (arr: T[]): void    => arr.forEach(fn)
+export const filter    = <T>(fn: (v: T, i: number, arr: T[]) => boolean) => (arr: T[]): T[]     => arr.filter(fn)
+export const some      = <T>(fn: (v: T, i: number, arr: T[]) => boolean) => (arr: T[]): boolean => arr.some(fn)
+export const every     = <T>(fn: (v: T, i: number, arr: T[]) => boolean) => (arr: T[]): boolean => arr.every(fn)
 export const reduce = <T, U>(fn: (agg: U, val: T, i: number, arr: T[]) => U, init: U) => (arr: T[]): U => arr.reduce(fn, init)
-export const find = <T>(fn: (v: T, i: number, arr: T[]) => boolean) => (arr: T[]): T => arr.find(fn)
+export const find      = <T>(fn: (v: T, i: number, arr: T[]) => boolean) => (arr: T[]): T => arr.find(fn)
 export const findWithContext = <T, U>(callback: (value: T, i: number) => [found: boolean, context: U]) => (arr: T[]): [value: T, context: U] | undefined => {
   for (const {v, i} of $(arr, map((v, i) => ({v, i})))) {
     const [found, context] = callback(v, i)
@@ -53,6 +53,7 @@ export const within = (min: number, max: number) => (num: string | number): bool
 }
 export const chars = (s: string) => s.replace(/\n/g, '').split('')
 export const pluck = (key: string ) => (o: { [key: string]: any }) => o[key]
+export const sort = <T>(fn: (a: T, b: T) => number) => (arr: T[]): T[] => arr.sort(fn)
 export const sortNumeric = ({ reverse }: { reverse: boolean } = { reverse: false }) => (arr: number[]): number[] => arr.sort((a: number, b: number) => reverse ? b - a : a - b)
 export const match = (reg: RegExp) => (s: string): RegExpMatchArray => s.match(reg)
 export const split = (sep: RegExp | string = '') => (s: string): string[] => s.split(sep)
