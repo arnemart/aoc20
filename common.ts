@@ -13,6 +13,8 @@ export function $<A, B, C>(v: A, fn1: CF<A, B>, fn2: CF<B, C>): C
 export function $<A, B, C, D>(v: A, fn1: CF<A, B>, fn2: CF<B, C>, fn3: CF<C, D>): D
 export function $<A, B, C, D, E>(v: A, fn1: CF<A, B>, fn2: CF<B, C>, fn3: CF<C, D>, fn4: CF<D, E>): E
 export function $<A, B, C, D, E, F>(v: A, fn1: CF<A, B>, fn2: CF<B, C>, fn3: CF<C, D>, fn4: CF<D, E>, fn5: CF<E, F>): F
+export function $<A, B, C, D, E, F, G>(v: A, fn1: CF<A, B>, fn2: CF<B, C>, fn3: CF<C, D>, fn4: CF<D, E>, fn5: CF<E, F>, fn6: CF<F, G>): G
+export function $<A, B, C, D, E, F, G, H>(v: A, fn1: CF<A, B>, fn2: CF<B, C>, fn3: CF<C, D>, fn4: CF<D, E>, fn5: CF<E, F>, fn6: CF<F, G>, fn7: CF<G, H>): H
 export function $(v: any, ...fns: CF<any, any>[]) {
   return fns.filter(fn => fn != null).reduce((v, fn) => fn(v), v)
 }
@@ -42,6 +44,7 @@ export const product = (nums: number[]): number => nums.reduce((p, n) => p * n, 
 export const zipWith = <T, U>(other: U[]) => (arr: T[]): [T, U][] => arr.map((v: T, i: number) => [v, other[i]])
 export const last = <T>(arr: T[]): T => arr[arr.length - 1]
 export const numbers = (radix: number = 10) => (arr: string[]): number[] => arr.map(s => parseInt(s, radix))
+export const number = (radix: number = 10) => (s: string): number => parseInt(s, radix)
 export const length = <T>(arr: T[]): number => arr.length
 export const indexOf = <T>(v: T) => (arr: T[]): number => arr.indexOf(v)
 export const next = <T>(i: number, amt: number = 1) => (arr: T[]): T => arr[(i + arr.length + (amt % arr.length)) % arr.length]
@@ -60,8 +63,8 @@ export const split = (sep: RegExp | string = '') => (s: string): string[] => s.s
 export const replace = (fnd: RegExp | string, rep: string = '') => (s: string): string => s.replace(fnd, rep)
 export const flatten = (arr: any): any[] => arr.flat()
 export const frequencies = <T>(arr: T[]): Map<T, number> => arr.reduce((freqs: Map<T, number>, e: T) => freqs.set(e, (freqs.get(e) || 0) + 1), new Map<T, number>())
-export const values = <K, V>(m: { [key: string]: V } | Map<K, V> | Set<V>) => (m instanceof Map || m instanceof Set) ? Array.from(m.values()) : Object.keys(m)
-export const keys = <K, V>(m: Map<K, V> ) => Array.from(m.keys())
+export const values = <K, V>(m: { [key: string]: V } | Map<K, V> | Set<V>) => (m instanceof Map || m instanceof Set) ? Array.from(m.values()) : Object.values(m)
+export const keys = <K, V>(m: { [key: string]: V } | Map<K, V>) => m instanceof Map ? Array.from(m.keys()) : Object.keys(m)
 export const entries = <K, V>(m: Map<K, V>): [K, V][] => Array.from(m.entries())
 export const into = (s: { new(...args: any[]): any; }) => (val: any) => new s(val)
 export const getIn = (...keys: (string | number)[]) => (val: any[] | { [key: string]: any }): any => keys.reduce((o, key) => o && o[key] ? o[key] : null, val)
@@ -85,3 +88,4 @@ export const spyWith = <T>(fn: (v: T) => any) => (v: T): T => {
   return v
 }
 export const spy: <T>(v: T) => T = spyWith(console.log)
+export const leftPad = (length: number, padWith: string) => (s: string): string => Array.from(Array(Math.max(0, length - s.length + 1))).join(padWith) + s

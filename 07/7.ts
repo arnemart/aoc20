@@ -26,7 +26,7 @@ class Bag {
   }
 
   canContain(bag: Bag): boolean {
-    return this.bagsInsideThisBag.has(bag) || $(this.bagsInsideThisBag, keys, some(b => b.canContain(bag)))
+    return this.bagsInsideThisBag.has(bag) || $(this.bagsInsideThisBag, keys, v => v as Bag[], some(b => b.canContain(bag)))
   }
 
   countBags(): number {
