@@ -1,4 +1,4 @@
-import { inputLines, $, entries, split, map, forEach, filter, sum, keys, match, some } from '../common'
+import { inputLines, $, entries, split, map, forEach, filter, sum, keys, match, some, values } from '../common'
 
 class Bag {
   color: string
@@ -7,7 +7,7 @@ class Bag {
   private static bags = new Map<string, Bag>()
 
   static allBags(): Bag[] {
-    return Array.from(this.bags.values())
+    return $(this.bags, values)
   }
 
   static getBag(color: string): Bag {
@@ -26,11 +26,11 @@ class Bag {
   }
 
   canContain(bag: Bag): boolean {
-    return this.bagsInsideThisBag.has(bag) || $(this.bagsInsideThisBag, keys, v => v as Bag[], some(b => b.canContain(bag)))
+    return this.bagsInsideThisBag.has(bag) || $(keys(this.bagsInsideThisBag), some(b => b.canContain(bag)))
   }
 
   countBags(): number {
-    return $(this.bagsInsideThisBag, entries, map(([bag, count]) => count + bag.countBags() * count), sum)
+    return $(entries(this.bagsInsideThisBag), map(([bag, count]) => count + bag.countBags() * count), sum)
   }
 }
 

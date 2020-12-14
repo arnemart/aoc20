@@ -40,18 +40,18 @@ type State = { currentMask: MaskCmd, mem: Mem }
 
 const sumMem = (state: State | State2): number => $(state, pluck('mem'), values, sum)
 
-const step1 = (lines: Cmd[]): number => $(lines,
+const step1 = (cmds: Cmd[]): number => $(cmds,
   slice(1),
-  reduce((state, line) => (line.type == 'mask' ? {
-    ...state, currentMask: line
+  reduce((state, cmd) => (cmd.type == 'mask' ? {
+    ...state, currentMask: cmd
    } : {
     ...state,
     mem: {
       ...state.mem,
-      [line.pos]: maskNumber(line.val, state.currentMask.mask)
+      [cmd.pos]: maskNumber(cmd.val, state.currentMask.mask)
     }
   }), {
-    currentMask: lines[0],
+    currentMask: cmds[0],
     mem: {}
   } as State),
   sumMem
@@ -81,13 +81,13 @@ const writeToMem = (mem: Mem, masks: string[][], pos: number, val: number): Mem 
 
 type State2 = { masks: string[][], mem: Mem }
 
-const step2 = (lines: Cmd[]): number => $(lines,
+const step2 = (cmds: Cmd[]): number => $(cmds,
   slice(1),
-  reduce((state, line) => (line.type == 'mask' ?
-    { ...state, masks: enumerateMasks(line.mask) } :
-    { ...state, mem: writeToMem(state.mem, state.masks, line.pos, line.val) }
+  reduce((state, cmd) => (cmd.type == 'mask' ?
+    { ...state, masks: enumerateMasks(cmd.mask) } :
+    { ...state, mem: writeToMem(state.mem, state.masks, cmd.pos, cmd.val) }
   ), {
-    masks: enumerateMasks((lines[0] as MaskCmd).mask),
+    masks: enumerateMasks((cmds[0] as MaskCmd).mask),
     mem: {}
   } as State2),
   sumMem

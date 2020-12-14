@@ -1,3 +1,4 @@
+import { KeyObject } from 'crypto'
 import { readFileSync } from 'fs'
 
 process.chdir(require.main.path)
@@ -55,17 +56,34 @@ export const within = (min: number, max: number) => (num: string | number): bool
   return n != null && n >= min && n <= max
 }
 export const chars = (s: string) => s.replace(/\n/g, '').split('')
-export const pluck = (key: string ) => (o: { [key: string]: any }) => o[key]
+export const pluck = <T, K extends keyof T>(key: K) => (o: T) => o[key]
 export const sort = <T>(fn: (a: T, b: T) => number) => (arr: T[]): T[] => arr.sort(fn)
 export const sortNumeric = ({ reverse }: { reverse: boolean } = { reverse: false }) => (arr: number[]): number[] => arr.sort((a: number, b: number) => reverse ? b - a : a - b)
 export const match = (reg: RegExp) => (s: string): RegExpMatchArray => s.match(reg)
 export const split = (sep: RegExp | string = '') => (s: string): string[] => s.split(sep)
 export const replace = (fnd: RegExp | string, rep: string = '') => (s: string): string => s.replace(fnd, rep)
-export const flatten = (arr: any): any[] => arr.flat()
+export const flatten = <T>(arr: T[] | T[][]): any[] => arr.flat()
 export const frequencies = <T>(arr: T[]): Map<T, number> => arr.reduce((freqs: Map<T, number>, e: T) => freqs.set(e, (freqs.get(e) || 0) + 1), new Map<T, number>())
-export const values = <K, V>(m: { [key: string]: V } | Map<K, V> | Set<V>) => (m instanceof Map || m instanceof Set) ? Array.from(m.values()) : Object.values(m)
-export const keys = <K, V>(m: { [key: string]: V } | Map<K, V>) => m instanceof Map ? Array.from(m.keys()) : Object.keys(m)
-export const entries = <K, V>(m: Map<K, V>): [K, V][] => Array.from(m.entries())
+
+export function values <K, V>(m: { [key: string]: V } | Map<K, V> | Set<V>) {
+  if ((m instanceof Map || m instanceof Set)) return Array.from(m.values())
+  return Object.values(m)
+}
+
+export function keys <K>(m: Map<K, any>): K[]
+export function keys (m: { [key: string]: any }): string[]
+export function keys (m: any): any {
+  if (m instanceof Map) return Array.from(m.keys())
+  return Object.keys(m)
+}
+
+export function entries <K, V>(m: Map<K, V>): [K, V][]
+export function entries <V>(m: { [key: string]: V }): [string, V][]
+export function entries (m: any): any {
+  if (m instanceof Map) return Array.from(m.entries())
+  return m.entries()
+}
+
 export const into = (s: { new(...args: any[]): any; }) => (val: any) => new s(val)
 export const getIn = (...keys: (string | number)[]) => (val: any[] | { [key: string]: any }): any => keys.reduce((o, key) => o && o[key] ? o[key] : null, val)
 export const cond = <T, U>(o: [T | T[], U | ((v: T) => U)][], def?: U) => (v: T): U => {
@@ -81,7 +99,7 @@ export const cond = <T, U>(o: [T | T[], U | ((v: T) => U)][], def?: U) => (v: T)
     return hit[1]
   }
 }
-export const is = <T>(...v: T[]) => cond([[v, true]], false)
+// export const is = <T>(...v: T[]) => cond([[v, true]], false)
 export const join = <T>(joinWith: string = '') => (arr: T[]): string => arr.join(joinWith)
 export const spyWith = <T>(fn: (v: T) => any) => (v: T): T => {
   fn(v)
