@@ -71,7 +71,7 @@ const enumerateMasks = (mask: string[]): string[][] => $(mask,
 
 const writeToMem = (mem: Mem, masks: string[][], pos: number, val: number): Mem => $(masks,
   map(mask => $(pos, zipWithMask(mask))),
-  map(map(([p, m]) => cond([['0', p], ['X', '0']], '1')(m))),
+  map(map(([p, m]) => $(m, cond([['0', p], ['X', '0']], '1')))),
   map(join()),
   reduce((mem, addr) => {
     mem[addr] = val
