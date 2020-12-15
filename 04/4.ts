@@ -1,4 +1,4 @@
-import { inputLines, within, $, pipe, map, filter, reduce, split } from '../common'
+import { inputLines, within, $, pipe, map, filter, reduce, split, keys } from '../common'
 
 const checkHgt = (v: string): boolean => {
   const matches = v.match(/^(\d+)(in|cm)$/)
@@ -18,7 +18,7 @@ const rules: { [key: string]: (v: string) => boolean} = {
   cid: ignore*/
 }
 
-const reqFields = Object.keys(rules)
+const reqFields = $(rules, keys)
 
 interface PP {
   [key: string]: string

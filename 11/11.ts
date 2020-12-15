@@ -1,9 +1,9 @@
-import { $, inputLines, map, split, getIn, cond, join, flatten, count, is } from '../common'
+import { $, inputLines, map, getIn, cond, join, flatten, count, is, chars } from '../common'
 
 type Seat = ('L' | '#' | '.')
 type SeatMap = Seat[][]
 
-const seatMap = $(inputLines(), map(split())) as SeatMap
+const seatMap = $(inputLines(), map(chars)) as SeatMap
 
 const dirs = [
   [-1, -1], [0, -1], [1, -1],

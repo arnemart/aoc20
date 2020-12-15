@@ -1,4 +1,4 @@
-import { $, cond, flatten, inputLines, join, leftPad, map, match, number, pluck, reduce, slice, split, sum, values, zipWith } from '../common'
+import { $, chars, cond, flatten, inputLines, join, leftPad, map, match, number, pluck, reduce, slice, split, sum, values, zipWith } from '../common'
 
 const reg = /^(mask|mem)(\[(\d+)\])? = ([0-9X]+)$/
 
@@ -24,7 +24,7 @@ const input: Cmd[] = $(inputLines(), map(match(reg)), map(([_0, type, _2, pos, v
 const zipWithMask = (mask: string[]) => (num: number): [string, string][] => $(num,
   n => n.toString(2),
   leftPad(36, '0'),
-  split(),
+  chars,
   zipWith(mask),
 )
 

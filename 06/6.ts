@@ -1,8 +1,8 @@
-import { inputLines, chars, pluck, $, map, sum, frequencies, values, count, into } from '../common'
+import { inputLines, chars, pluck, $, map, sum, frequencies, values, count, intoSet } from '../common'
 
 const groups = inputLines(/\n\n/)
 
-const part1sum = $(groups, map(chars), map(into(Set)), map(pluck('size')), sum)
+const part1sum = $(groups, map(chars), map(intoSet), map(pluck('size')), sum)
 
 console.log('Part 1:', part1sum)
 

@@ -84,7 +84,7 @@ export function entries (m: any): any {
   return m.entries()
 }
 
-export const into = (s: { new(...args: any[]): any; }) => (val: any) => new s(val)
+export const intoSet = <T extends Iterable<any>>(val: T): Set<T> => new Set(val)
 export const getIn = (...keys: (string | number)[]) => (val: any[] | { [key: string]: any }): any => keys.reduce((o, key) => o && o[key] ? o[key] : null, val)
 export const cond = <T, U>(o: [T | T[], U | ((v: T) => U)][], def?: U) => (v: T): U => {
   const hit = o.find(e => e[0] instanceof Array ? e[0].some(ee => ee == v) : e[0] == v)
@@ -99,7 +99,7 @@ export const cond = <T, U>(o: [T | T[], U | ((v: T) => U)][], def?: U) => (v: T)
     return hit[1]
   }
 }
-// export const is = <T>(...v: T[]) => cond([[v, true]], false)
+export const is = <T>(...v: T[]) => cond([[v, true]], false)
 export const join = <T>(joinWith: string = '') => (arr: T[]): string => arr.join(joinWith)
 export const spyWith = <T>(fn: (v: T) => any) => (v: T): T => {
   fn(v)
