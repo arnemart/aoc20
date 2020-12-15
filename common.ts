@@ -6,6 +6,7 @@ process.chdir(require.main.path)
 export const inputLines = (splitWith: RegExp = /\n/) => readFileSync('input.txt').toString().split(splitWith)
 
 export const xor = (a: boolean, b: boolean) => (a && !b) || (!a && b)
+export const range = (n1: number, n2?: number) => n2 == undefined ? Array.from(Array(n1)).map((_, i) => i) : Array.from(Array(n2 - n1)).map((_, i) => i + n1)
 
 type CF<A, B> = (a: A) => B
 export function $<A>(v: A): A
