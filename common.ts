@@ -108,3 +108,4 @@ export const spyWith = <T>(fn: (v: T) => any) => (v: T): T => {
 }
 export const spy: <T>(v: T) => T = spyWith(console.log)
 export const leftPad = (length: number, padWith: string) => (s: string): string => Array.from(Array(Math.max(0, length - s.length + 1))).join(padWith) + s
+export const not = <T>(fn: (v: T) => boolean) => (v: T): boolean => !fn(v)
