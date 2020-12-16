@@ -46,8 +46,6 @@ const allValidPositions: ValidPos[] = $(rules,
   filterPositions
 )
 
-const validPositions = filterPositions(allValidPositions)
-
-const departureProduct = $(validPositions, filter(p => /^departure/.test(p.name)), map(p => yourTicket[p.validPositions[0]]), product)
+const departureProduct = $(allValidPositions, filter(p => /^departure/.test(p.name)), map(p => yourTicket[p.validPositions[0]]), product)
 
 console.log('Part 2:', departureProduct)
