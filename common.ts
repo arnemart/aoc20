@@ -6,7 +6,8 @@ process.chdir(require.main.path)
 export const inputLines = (splitWith: RegExp = /\n/) => readFileSync('input.txt').toString().split(splitWith)
 
 export const xor = (a: boolean, b: boolean) => (a && !b) || (!a && b)
-export const range = (n1: number, n2?: number) => n2 == undefined ? Array.from(Array(n1)).map((_, i) => i) : Array.from(Array(n2 - n1)).map((_, i) => i + n1)
+export const fillArray = <T>(n: number, v: T = null): T[] => Array.from(Array(n)).map(_ => v)
+export const range = (n1: number, n2?: number) => n2 == undefined ? fillArray(n1).map((_, i) => i) : fillArray(n2 - n1).map((_, i) => i + n1)
 
 type CF<A, B> = (a: A) => B
 export function $<A>(v: A): A
@@ -109,3 +110,4 @@ export const spyWith = <T>(fn: (v: T) => any) => (v: T): T => {
 export const spy: <T>(v: T) => T = spyWith(console.log)
 export const leftPad = (length: number, padWith: string) => (s: string): string => Array.from(Array(Math.max(0, length - s.length + 1))).join(padWith) + s
 export const not = <T>(fn: (v: T) => boolean) => (v: T): boolean => !fn(v)
+export const repeat = <T>(n: number, fn: (v: T) => T) => (v: T): T => n == 0 ? v : repeat(n - 1, fn)(fn(v))
