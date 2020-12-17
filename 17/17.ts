@@ -4,7 +4,7 @@ type Grid = string[][][]
 type Grid4d = Grid[]
 type Neighbor = { dx: number, dy: number, dz: number, dw?: number }
 
-const initialState: Grid = [$(inputLines(), map(pipe(split())))]
+const initialState: Grid = [$(inputLines(), map(split()))]
 const initialState4d: Grid4d = [initialState]
 
 const coords = [-1, 0, 1]
