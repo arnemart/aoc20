@@ -123,3 +123,4 @@ export const spy: <T>(v: T) => T = spyWith(console.log)
 export const leftPad = (length: number, padWith: string) => (s: string): string => Array.from(Array(Math.max(0, length - s.length + 1))).join(padWith) + s
 export const not = <T>(fn: (v: T) => boolean) => (v: T): boolean => !fn(v)
 export const repeat = <T>(n: number, fn: (v: T) => T) => (v: T): T => n == 0 ? v : repeat(n - 1, fn)(fn(v))
+export const add = (n: number) => (v: number): number => n + v
