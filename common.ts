@@ -9,6 +9,16 @@ export const xor = (a: boolean, b: boolean) => (a && !b) || (!a && b)
 export const fillArray = <T>(n: number, v: T = null): T[] => Array.from(Array(n)).map(_ => v)
 export const range = (n1: number, n2?: number) => n2 == undefined ? fillArray(n1).map((_, i) => i) : fillArray(n2 - n1).map((_, i) => i + n1)
 
+export const memoize = <A, B>(fn: (v: A) => B) => {
+  const memos = new Map<A, B>()
+  return (v: A): B => {
+    if (!memos.has(v)) {
+      memos.set(v, fn(v))
+    }
+    return memos.get(v)
+  }
+}
+
 type CF<A, B> = (a: A) => B
 export function $<A>(v: A): A
 export function $<A, B>(v: A, fn1: CF<A, B>): B
@@ -62,9 +72,11 @@ export const pluck = <T, K extends keyof T>(key: K) => (o: T) => o[key]
 export const sort = <T>(fn: (a: T, b: T) => number) => (arr: T[]): T[] => arr.sort(fn)
 export const sortNumeric = ({ reverse }: { reverse: boolean } = { reverse: false }) => (arr: number[]): number[] => arr.sort((a: number, b: number) => reverse ? b - a : a - b)
 export const match = (reg: RegExp) => (s: string): RegExpMatchArray => s.match(reg)
+export const test = (reg: RegExp) => (s: string): boolean => reg.test(s)
 export const split = (sep: RegExp | string = '') => (s: string): string[] => s.split(sep)
 export const replace = (fnd: RegExp | string, rep: string = '') => (s: string): string => s.replace(fnd, rep)
-export const flatten = <T>(arr: T[] | T[][]): any[] => arr.flat()
+export const flatten = <T, A extends Array<T>, D extends number = 1>(depth?: D) => (arr: A): FlatArray<A, D>[] => arr.flat(depth)
+
 export const frequencies = <T>(arr: T[]): Map<T, number> => arr.reduce((freqs: Map<T, number>, e: T) => freqs.set(e, (freqs.get(e) || 0) + 1), new Map<T, number>())
 
 export function values <K, V>(m: { [key: string]: V } | Map<K, V> | Set<V>) {

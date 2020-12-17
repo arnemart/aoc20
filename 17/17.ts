@@ -1,50 +1,43 @@
-import { $, cond, count, fillArray, filter, flatten, getIn, inputLines, is, join, map, pipe, repeat, split, spyWith, sum, within } from '../common'
+import { $, cond, count, fillArray, filter, flatten, getIn, inputLines, is, map, pipe, pluck, range, repeat, split, within, memoize, reduce } from '../common'
 
-type Grid = string[][][]
-type Grid4d = Grid[]
-type Neighbor = { dx: number, dy: number, dz: number, dw?: number }
+interface Grid extends Array<Grid | string> {}
+type Neighbour = number[]
 
-const initialState: Grid = [$(inputLines(), map(split()))]
-const initialState4d: Grid4d = [initialState]
+const initialState: Grid = [$(inputLines(), map(pipe(split())))]
+const initialState4d: Grid = [initialState]
 
 const coords = [-1, 0, 1]
-const neighbors3d: Neighbor[] = $(coords, map(dz => $(coords, map(dy => $(coords, map(dx => ({dx, dy, dz})))))), flatten, flatten, filter(({dx, dy, dz}) => dx != 0 || dy != 0 || dz != 0))
-const neighbors4d: Neighbor[] = $(coords, map(dw => $([...neighbors3d, {dx: 0, dy: 0, dz: 0}], map(n => ({...n, dw})))), flatten, filter(({dx, dy, dz, dw}) => dx != 0 || dy != 0 || dz != 0 || dw != 0))
 
-const emptyRow = (w: number) => fillArray(w, '.')
-const emptySlice = (w: number, h: number) => fillArray(h, emptyRow(w))
-const emptyCube = (w: number, h: number, d: number) => fillArray(d, emptySlice(w, h))
+const generateNeighbours = (dims: number): Neighbour[] => dims <= 1 ?
+  $(coords, map(c => [c])) :
+  $(generateNeighbours(dims - 1),
+    map(n => $(coords,
+      map(c => [...n, c]))),
+    flatten())
+
+const neighbours: (dims: number) => Neighbour[] = memoize((dims) => $(dims,
+  generateNeighbours,
+  filter(reduce((allNonZero: boolean, n) => (allNonZero || n != 0), false))))
+
+const countDimensions = (grid: Grid | string): number => Array.isArray(grid) ? 1 + countDimensions(grid[0]) : 0
+
+const empty = (sizes: number[]): Grid => fillArray(sizes[0], sizes.length == 1 ? '.' : empty(sizes.slice(1)))
 
 const expand = (grid: Grid): Grid => {
-  const w = grid[0].length + 2
-  const h = grid[0][0].length + 2
+  const dims = countDimensions(grid)
+  if (dims == 1) {
+    return ['.', ...grid, '.']
+  }
+  const sizes: number[] = $(range(dims - 1), map(n => fillArray(n + 1, 0)), map(ns => $(grid, getIn(...ns), pluck('length'), n => n + 2)))
   return [
-    emptySlice(w, h),
-    ...$(grid, map(slice => [
-      emptyRow(w),
-      ...$(slice, map(row => ['.', ...row, '.'])),
-      emptyRow(w)
-    ])),
-    emptySlice(w, h)
+    empty(sizes),
+    ...$(grid, map(part => expand(part as Grid))),
+    empty(sizes)
   ]
 }
 
-const expand4d = (grid: Grid4d): Grid4d => {
-  const h = grid[0].length + 2
-  const w = grid[0][0].length + 2
-  const d = grid[0][0][0].length + 2
-  return [
-    emptyCube(d, w, h),
-    ...$(grid, map(expand)),
-    emptyCube(d, w, h)
-  ]
-}
-
-const countActiveNeighbors = (grid: Grid, x: number, y: number, z: number): number => $(neighbors3d,
-  count(({dx, dy, dz}) => $(grid, getIn(z + dz, y + dy, x + dx), is('#'))))
-
-const countActiveNeighbors4d = (grid: Grid4d, x: number, y: number, z: number, w: number): number => $(neighbors4d,
-  count(({dx, dy, dz, dw}) => $(grid, getIn(w + dw, z + dz, y + dy, x + dx), is('#'))))
+const countActiveNeighbours = (grid: Grid, initialCoords: number[]): number => $(neighbours(initialCoords.length),
+  map(map((n, i) => initialCoords[i] + n)), count(coords => $(grid, getIn(...coords), is('#'))))
 
 const alive = (cell: string, activeNeigbours: number) => $(cell,
   cond([
@@ -52,24 +45,16 @@ const alive = (cell: string, activeNeigbours: number) => $(cell,
     ['.', activeNeigbours == 3 ? '#' : '.']
   ]))
 
-const step = (initialGrid: Grid): Grid => $(initialGrid,
-  expand,
-  map((slice, z, grid) => $(slice,
-    map((row, y) => $(row,
-      map((cell, x) => alive(cell, countActiveNeighbors(grid, x, y, z))))))))
+const step = (initialGrid: Grid): Grid => {
+  const expandedGrid = expand(initialGrid)
+  const recur = (grid: Grid, coords: number[] = []): Grid => countDimensions(grid) <= 1 ?
+    $(grid, map((cell: string, c) => alive(cell, countActiveNeighbours(expandedGrid, [...coords, c])))) :
+    $(grid, map((part, c) => recur(part as Grid, [...coords, c])))
 
-const step4d = (initialGrid: Grid4d): Grid4d => $(initialGrid,
-  expand4d,
-  map((cube, w, grid) => $(cube,
-    map((slice, z) => $(slice,
-      map((row, y) => $(row,
-        map((cell, x) => alive(cell, countActiveNeighbors4d(grid, x, y, z, w))))))))))
+  return recur(expandedGrid)
+}
 
-const countAllActive = (grid: Grid): number => $(grid, flatten, flatten, count(is('#')))
-const countAllActive4d = pipe(map(countAllActive), sum)
-
-const print = spyWith((grid: Grid) => console.log($(grid, map(pipe(map(join()), join('\n'))), join('\n\n')) + '\n\n'))
-const print4d = spyWith((grid: Grid4d) => console.log($(grid, map(pipe(map(pipe(map(join()), join('\n'))), join('\n\n'))), join('\n---\n')) + '\n\n'))
+const countAllActive = (grid: Grid): number => $(grid, flatten(Infinity), count(is('#')))
 
 console.log('Part 1:', $(initialState, repeat(6, step), countAllActive))
-console.log('Part 2:', $(initialState4d, repeat(6, step4d), countAllActive4d))
+console.log('Part 2:', $(initialState4d, repeat(6, step), countAllActive))

@@ -60,7 +60,7 @@ const stepUntilEqual = (stepFn: (s: SeatMap) => SeatMap) => (seats: SeatMap): Se
 
 const countOccupied = (seats: SeatMap): number => $(
   seats,
-  flatten,
+  flatten(),
   count(is('#'))
 )
 

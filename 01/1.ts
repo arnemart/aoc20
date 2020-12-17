@@ -21,7 +21,7 @@ const part2numbers = $(
     }))
     return [v != null, v]
   }),
-  flatten
+  flatten()
 )
 
 console.log('Part 2:', $(part2numbers, product))

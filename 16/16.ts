@@ -16,7 +16,7 @@ const checkRule = (value: number) => (rule: Rule) => $(rule.validRanges,
 
 const checkRules = (value: number) => $(rules, some(checkRule(value)))
 
-const allInvalidValues = $(nearbyTickets, flatten, filter(not(checkRules)), sum)
+const allInvalidValues = $(nearbyTickets, flatten(), filter(not(checkRules)), sum)
 
 console.log('Part 1:', allInvalidValues)
 

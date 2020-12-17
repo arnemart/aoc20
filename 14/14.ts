@@ -63,7 +63,7 @@ console.log('Part 1:', step1(input))
 const enumerateMasks = (mask: string[]): string[][] => $(mask,
   reduce((masks, v) => v == 'X' ? $(masks,
     map(m => [[...m, 'X'], [...m, '1']]),
-    flatten
+    flatten()
   ) : $(masks,
     map(m => [...m, v])
   ), [[]])
