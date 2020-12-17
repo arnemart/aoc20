@@ -21,7 +21,7 @@ const neighbours: (dims: number) => Neighbour[] = memoize((dims) => $(dims,
 
 const countDimensions = (grid: Grid | string): number => Array.isArray(grid) ? 1 + countDimensions(grid[0]) : 0
 
-const empty = (sizes: number[]): Grid => fillArray(sizes[0], sizes.length == 1 ? '.' : empty(sizes.slice(1)))
+const emptyGrid = (sizes: number[]): Grid => fillArray(sizes[0], sizes.length == 1 ? '.' : emptyGrid(sizes.slice(1)))
 
 const expand = (grid: Grid): Grid => {
   const dims = countDimensions(grid)
@@ -30,9 +30,9 @@ const expand = (grid: Grid): Grid => {
   }
   const sizes: number[] = $(range(dims - 1), map(n => fillArray(n + 1, 0)), map(ns => $(grid, getIn(...ns), pluck('length'), n => n + 2)))
   return [
-    empty(sizes),
+    emptyGrid(sizes),
     ...$(grid, map(part => expand(part as Grid))),
-    empty(sizes)
+    emptyGrid(sizes)
   ]
 }
 
