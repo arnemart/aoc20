@@ -59,9 +59,7 @@ export const last = <T>(arr: T[]): T => arr[arr.length - 1]
 export const numbers = (radix: number = 10) => (arr: string[]): number[] => arr.map(s => parseInt(s, radix))
 export const number = (radix: number = 10) => (s: string): number => parseInt(s, radix)
 export const length = <T>(arr: T[]): number => arr.length
-export const indexOf = <T>(v: T) => (arr: T[]): number => arr.indexOf(v)
 export const next = <T>(i: number, amt: number = 1) => (arr: T[]): T => arr[(i + arr.length + (amt % arr.length)) % arr.length]
-export const prev = <T>(i: number, amt: number = 1): ((arr: T[]) => T) => prev(i, -amt)
 export const count = <T>(fn: (v: T) => boolean) => (arr: T[]) => arr.filter(fn).length
 export const within = (min: number, max: number) => (num: string | number): boolean => {
   const n = typeof num == 'number' ? num : parseInt(num, 10)
@@ -74,7 +72,10 @@ export const sortNumeric = ({ reverse }: { reverse: boolean } = { reverse: false
 export const match = (reg: RegExp) => (s: string): RegExpMatchArray => s.match(reg)
 export const test = (reg: RegExp) => (s: string): boolean => reg.test(s)
 export const split = (sep: RegExp | string = '') => (s: string): string[] => s.split(sep)
-export const replace = (fnd: RegExp | string, rep: string = '') => (s: string): string => s.replace(fnd, rep)
+
+export function replace(fnd: RegExp | string, rep: string): (s: string) => string
+export function replace(fnd: RegExp | string, rep: ((substring: string, ...args: any[]) => string)): (s: string) => string
+export function replace(fnd: RegExp | string, rep: any = '') { return (s: string): string => s.replace(fnd, rep) }
 export const flatten = <T, A extends Array<T>, D extends number = 1>(depth?: D) => (arr: A): FlatArray<A, D>[] => arr.flat(depth)
 
 export const frequencies = <T>(arr: T[]): Map<T, number> => arr.reduce((freqs: Map<T, number>, e: T) => freqs.set(e, (freqs.get(e) || 0) + 1), new Map<T, number>())
