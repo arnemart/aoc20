@@ -1,4 +1,4 @@
-import { $, cond, count, fillArray, filter, flatten, getIn, inputLines, is, map, pluck, range, repeat, split, within, memoize, reduce, add } from '../common'
+import { $, cond, count, fillArray, filter, flatten, getIn, inputLines, is, map, pluck, range, repeat, split, within, memoize, reduce, add, pipe } from '../common'
 
 interface Grid extends Array<Grid | string> {}
 
@@ -14,7 +14,7 @@ const generateNeighbours = (dims: number): number[][] => dims <= 1 ?
       map(c => [...n, c]))),
     flatten())
 
-const neighbours: (dims: number) => number[][] = memoize((dims) => $(dims,
+const neighbours: (dims: number) => number[][] = memoize(pipe(
   generateNeighbours,
   filter(reduce((allNonZero: boolean, n) => (allNonZero || n != 0), false))))
 
@@ -27,7 +27,11 @@ const expand = (grid: Grid): Grid => {
   if (dims == 1) {
     return ['.', ...grid, '.']
   }
-  const sizes: number[] = $(range(dims - 1), map(n => fillArray(n + 1, 0)), map(ns => $(grid, getIn(...ns), pluck('length'), add(2))))
+
+  const sizes: number[] = $(range(dims - 1),
+    map(n => fillArray(n + 1, 0)),
+    map(ns => $(grid, getIn(...ns), pluck('length'), add(2))))
+
   return [
     emptyGrid(sizes),
     ...$(grid, map(expand)),
