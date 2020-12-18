@@ -10,7 +10,7 @@ const calculateFromLeft = (line: string): string => calcReg.test(line) ?
   calculateFromLeft(line.replace(calcReg, eval)) :
   line
 
-const replaceParens = (calcFn: (s: string) => string) => (line: string): string => /\(/.test(line) ?
+const replaceParens = (calcFn: (s: string) => string) => (line: string): string => parenReg.test(line) ?
   replaceParens(calcFn)(line.replace(parenReg, (_, match) => calcFn(match))) :
   calcFn(line)
 
@@ -20,4 +20,4 @@ const calculatePlusFirst = (line: string): string => plusReg.test(line) ?
   calculatePlusFirst(line.replace(plusReg, eval)) :
   line
 
-  console.log('Part 2:', $(input, map(replaceParens(pipe(calculatePlusFirst, calculateFromLeft))), numbers(), sum))
+console.log('Part 2:', $(input, map(replaceParens(pipe(calculatePlusFirst, calculateFromLeft))), numbers(), sum))
