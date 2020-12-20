@@ -1,8 +1,9 @@
-import { $, inputLines, map, pipe, split, match, test, join, filter, length, pluck, number, last, first, slice, spy, count, some, reverse, product, range, spyWith, reduce, repeat, find, forEach, values, xor, flatten, getIn, every, findWithContext, is } from '../common'
+import { $, inputLines, map, pipe, split, match, join, filter, pluck, number, last, first, slice, spy, count, some, reverse, product, range, spyWith, reduce, repeat, find, forEach, values, flatten, getIn, every, findWithContext, is } from '../common'
 
+type Img = string[][]
 type Tile = {
   id: number
-  img: string[][]
+  img: Img
   sides: string[]
   matches: number[]
   matchCount: number
@@ -36,13 +37,13 @@ const tiles: Tile[] = $(inputLines(/\n\n/), map(split(/\n/)), map(lines => ({
 
 console.log('Part 1:', $(tiles, filter(t => t.matchCount == 2), map(pluck('id')), product))
 
-const flipImg = (img: string[][]) => $(img, map(reverse))
+const flipImg = (img: Img) => $(img, map(reverse))
 const flip = (tile: Tile): Tile => ({
   ...tile,
   img: flipImg(tile.img)
 })
 
-const rotateImg = (img: string[][]) => $(img, map((line, x) => $(line, map((_, y) => img[img.length - 1 - y][x]))))
+const rotateImg = (img: Img) => $(img, map((line, x) => $(line, map((_, y) => img[img.length - 1 - y][x]))))
 const rotate = (t: Tile): Tile => ({
   ...t,
   img: rotateImg(t.img)
@@ -95,13 +96,13 @@ const buildGrid = (t: Tile, grid: number[][] = []): number[][] => {
   return [...grid, row]
 }
 
-const trimImg = (img: string[][]): string[][] => $(img, slice(1, -1), map(slice(1, -1)))
+const trimImg = (img: Img): Img => $(img, slice(1, -1), map(slice(1, -1)))
 
-const buildImage = (grid: number[][]): string[][] => $(grid,
+const buildImage = (grid: number[][]): Img => $(grid,
   map(pipe(
     map((id: number) => tileMap[id]),
     map(pipe(pluck('img'), trimImg)),
-    (imgs: string[][][]) => $(range(imgs[0].length),
+    (imgs: Img[]) => $(range(imgs[0].length),
       map(i => $(imgs, map(pluck(i)), flatten()))))),
   flatten())
 
@@ -111,21 +112,18 @@ const seaMonster = $(
   ' #  #  #  #  #  #   ',
   split(/\n/),
   map((line, y) => $(line, split(), map((c, x) => ({x, y, c})), filter(m => m.c == '#'))), flatten())
-
-const seaMonsterWidth = 20
-const seaMonsterHeight = 3
+const seaMonsterWidth = $(seaMonster, map(pluck('x')), ns => Math.max(...ns)) + 1
+const seaMonsterHeight = $(seaMonster, map(pluck('y')), ns => Math.max(...ns)) + 1
 
 const img = $(topLeft, buildGrid, buildImage)
 
-const findSeaMonster = (img: string[][]) => $(range(img.length - seaMonsterHeight), findWithContext(y => {
+const findSeaMonster = (img: Img) => $(range(img.length - seaMonsterHeight), findWithContext(y => {
   const x = $(range(img.length - seaMonsterWidth), find(x =>
     $(seaMonster, every(c => $(img, getIn(y + c.y, x + c.x), is('#'))))))
   return [x != null, {x, y}]
 }))
 
-const showimg = spyWith(pipe(map(join()), join('\n'), s => s + '\n', spy))
-
-const putSeaMonsterInImg = (img: string[][], dirs = 0) => {
+const putSeaMonsterInImg = (img: Img, dirs = 0) => {
   if (dirs == 8) return img
   const c = findSeaMonster(img)
   if (c) {
