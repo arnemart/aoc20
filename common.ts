@@ -55,6 +55,7 @@ export const slice = <T>(start: number, end?: number) => (arr: T[]): T[] => arr.
 export const sum = (nums: number[]): number => nums.reduce((s, n) => s + n, 0)
 export const product = (nums: number[]): number => nums.reduce((p, n) => p * n, 1)
 export const zipWith = <T, U>(other: U[]) => (arr: T[]): [T, U][] => arr.map((v: T, i: number) => [v, other[i]])
+export const first = <T>(arr: T[]): T => arr[0]
 export const last = <T>(arr: T[]): T => arr[arr.length - 1]
 export const numbers = (radix: number = 10) => (arr: string[]): number[] => arr.map(s => parseInt(s, radix))
 export const number = (radix: number = 10) => (s: string): number => parseInt(s, radix)
@@ -125,3 +126,4 @@ export const leftPad = (length: number, padWith: string) => (s: string): string 
 export const not = <T>(fn: (v: T) => boolean) => (v: T): boolean => !fn(v)
 export const repeat = <T>(n: number, fn: (v: T) => T) => (v: T): T => n == 0 ? v : repeat(n - 1, fn)(fn(v))
 export const add = (n: number) => (v: number): number => n + v
+export const reverse = <T>(a: T[]): T[] => a.slice().reverse()
