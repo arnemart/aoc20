@@ -32,7 +32,7 @@ const filterPositions = (validPositions: ValidPos[]): ValidPos[] => $(validPosit
   filterPositions($(validPositions, map(({ name, validPositions: poss }, i) => ({
     name,
     validPositions: poss.length == 1 ? poss : $(poss, filter(pos =>
-      $(validPositions, filter((vp, j) => j != i && vp.validPositions.length == 1 && vp.validPositions[0] == pos), length) == 0))
+      !$(validPositions, some((vp, j) => j != i && vp.validPositions.length == 1 && vp.validPositions[0] == pos))))
   }))))
 
 const allValidPositions: ValidPos[] = $(rules,

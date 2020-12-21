@@ -68,7 +68,7 @@ export const within = (min: number, max: number) => (num: string | number): bool
 }
 export const chars = (s: string) => s.replace(/\n/g, '').split('')
 export const pluck = <T, K extends keyof T>(key: K) => (o: T) => o[key]
-export const sort = <T>(fn: (a: T, b: T) => number) => (arr: T[]): T[] => arr.sort(fn)
+export const sort = <T>(fn?: (a: T, b: T) => number) => (arr: T[]): T[] => fn ? arr.sort(fn) : arr.sort()
 export const sortNumeric = ({ reverse }: { reverse: boolean } = { reverse: false }) => (arr: number[]): number[] => arr.sort((a: number, b: number) => reverse ? b - a : a - b)
 export const match = (reg: RegExp) => (s: string): RegExpMatchArray => s.match(reg)
 export const test = (reg: RegExp) => (s: string): boolean => reg.test(s)
@@ -100,7 +100,7 @@ export function entries (m: any): any {
   return m.entries()
 }
 
-export const intoSet = <T extends Iterable<any>>(val: T): Set<T> => new Set(val)
+export const intoSet = <T>(val: T[]): Set<T> => new Set(val)
 export const getIn = (...keys: (string | number)[]) => (val: any[] | { [key: string]: any }): any => keys.reduce((o, key) => o && o[key] ? o[key] : null, val)
 export const cond = <T, U>(o: [T | T[], U | ((v: T) => U)][], def?: U) => (v: T): U => {
   const hit = o.find(e => e[0] instanceof Array ? e[0].some(ee => ee == v) : e[0] == v)
