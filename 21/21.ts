@@ -26,12 +26,11 @@ const ingredientsWithoutAllergens = $(allIngredients, filter(i => !ingredientsWi
 console.log('Part 1:', $(ingredientsWithoutAllergens, map(i => $(input, count(line => line.ingredients.includes(i)))), sum))
 
 const filterOutIngredients = (matches: Matches): Matches => $(matches, values, every(v => v.length == 1)) ? matches :
-  $(matches, keys, reduce((m, allergen) => {
-    const ingredients = matches[allergen]
-    m[allergen] = ingredients.length == 1 ? ingredients : $(ingredients, filter(ingredient =>
+  $(matches, keys, reduce((m, allergen) => ({
+    ...m,
+    [allergen]: matches[allergen].length == 1 ? matches[allergen] : $(matches[allergen], filter(ingredient =>
       !$(matches, keys, some(a => a != allergen && matches[a].length == 1 && matches[a][0] == ingredient))))
-    return m
-  }, {}), filterOutIngredients)
+  }), {}), filterOutIngredients)
 
 const matches = $(possibleMatches, filterOutIngredients)
 
