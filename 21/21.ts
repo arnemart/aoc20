@@ -19,8 +19,7 @@ const possibleMatches: Matches = $(allAllergens, reduce((matches, allergen) => (
     allUnique('ingredients'), filter(i => $(linesWithAll, every(line => line.ingredients.includes(i))))))
 }), {}))
 
-const ingredientsWithAllergens = $(possibleMatches, values, flatten(), intoSet, values)
-const ingredientsWithoutAllergens = $(allIngredients, filter(i => !ingredientsWithAllergens.includes(i)))
+const ingredientsWithoutAllergens = $(allIngredients, filter(i => !$(possibleMatches, values, flatten(), intoSet, s => s.has(i))))
 
 console.log('Part 1:', $(ingredientsWithoutAllergens, map(i => $(input, count(line => line.ingredients.includes(i)))), sum))
 
