@@ -13,12 +13,11 @@ const allAllergens = $(input, allUnique('allergens'))
 
 type Matches = { [allergen: string]: string[] }
 
-const possibleMatches: Matches = $(allAllergens, reduce((matches, allergen) => {
-  const linesWithAll = $(input, filter(line => line.allergens.includes(allergen)))
-  const uniqueIngredients = $(linesWithAll, allUnique('ingredients'), filter(i => $(linesWithAll, every(line => line.ingredients.includes(i)))))
-  matches[allergen] = uniqueIngredients
-  return matches
-}, {}))
+const possibleMatches: Matches = $(allAllergens, reduce((matches, allergen) => ({
+  ...matches,
+  [allergen]: $(input, filter(line => line.allergens.includes(allergen)), linesWithAll => $(linesWithAll,
+    allUnique('ingredients'), filter(i => $(linesWithAll, every(line => line.ingredients.includes(i))))))
+}), {}))
 
 const ingredientsWithAllergens = $(possibleMatches, values, flatten(), intoSet, values)
 const ingredientsWithoutAllergens = $(allIngredients, filter(i => !ingredientsWithAllergens.includes(i)))
