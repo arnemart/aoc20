@@ -3,7 +3,7 @@ import { readFileSync } from 'fs'
 
 process.chdir(require.main.path)
 
-export const inputLines = (splitWith: RegExp = /\n/) => readFileSync('input.txt').toString().split(splitWith)
+export const inputLines = (splitWith: string | RegExp = /\n/) => readFileSync('input.txt').toString().split(splitWith)
 
 export const xor = (a: boolean, b: boolean) => (a && !b) || (!a && b)
 export const fillArray = <T>(n: number, v: T = null): T[] => Array.from(Array(n)).map(_ => v)
