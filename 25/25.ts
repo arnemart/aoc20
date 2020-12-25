@@ -11,6 +11,6 @@ const findLoops = (n: number): number => {
   return i
 }
 
-const loop = (n: number, s: number): number => $(range(n), reduce(t => (t * s) % 20201227, 1))
+const loop = (s: number) => (n: number): number => $(range(n), reduce(t => (t * s) % 20201227, 1))
 
-console.log('Part 1:', $(pk1, findLoops, n => loop(n, pk2)))
+console.log('Part 1:', $(pk1, findLoops, loop(pk2)))
