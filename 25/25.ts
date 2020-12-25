@@ -1,4 +1,4 @@
-import { $, inputLines, numbers, range, reduce } from '../common'
+import { $, inputLines, numbers, repeat } from '../common'
 
 const [pk1, pk2] = $(inputLines(), numbers(10))
 
@@ -11,6 +11,6 @@ const findLoops = (n: number): number => {
   return i
 }
 
-const loop = (s: number) => (n: number): number => $(range(n), reduce(t => (t * s) % 20201227, 1))
+const loop = (s: number) => (n: number): number => $(1, repeat(n, t => (t * s) % 20201227))
 
 console.log('Part 1:', $(pk1, findLoops, loop(pk2)))
