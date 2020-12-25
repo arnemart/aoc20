@@ -1,6 +1,6 @@
 import { $, inputLines, numbers, repeat } from '../common'
 
-const [pk1, pk2] = $(inputLines(), numbers(10))
+const [pk1, pk2] = $(inputLines(), numbers())
 
 const findLoops = (n: number): number => {
   let i = 0
