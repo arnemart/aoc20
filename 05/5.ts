@@ -1,4 +1,4 @@
-import { inputLines, $, map, pipe, replace, numbers, sortNumeric } from '../common'
+import { $, inputLines, map, numbers, pipe, replace, sortNumeric } from '../common'
 
 const seats: number[] = $(
   inputLines(),

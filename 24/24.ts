@@ -1,4 +1,4 @@
-import { $, cond, count, fillArray, find, getIn, inputLines, is, map, pipe, range, reduce, repeat, slice, sum } from '../common'
+import { $, cond, count, fillArray, find, getIn, inputLines, is, map, pipe, range, reduce, repeat, sum } from '../common'
 
 type Dir = 'se' | 'sw' | 'ne' | 'nw' | 'e' | 'w'
 type Dirs = Dir[]

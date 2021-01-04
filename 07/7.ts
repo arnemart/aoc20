@@ -1,4 +1,4 @@
-import { inputLines, $, entries, split, map, forEach, filter, sum, keys, match, some, values } from '../common'
+import { $, entries, filter, forEach, inputLines, keys, map, match, some, split, sum, values } from '../common'
 
 class Bag {
   color: string

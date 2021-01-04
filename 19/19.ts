@@ -1,4 +1,4 @@
-import { $, inputLines, map, pipe, split, match, test, join, filter, length } from '../common'
+import { $, filter, inputLines, join, length, map, match, pipe, split, test } from '../common'
 
 const inputParts = $(inputLines(/\n\n/))
 

@@ -1,4 +1,4 @@
-import { $, inputLines, map, pipe, split, match, join, filter, pluck, number, last, first, slice, spy, count, some, reverse, product, range, spyWith, reduce, repeat, find, forEach, values, flatten, getIn, every, findWithContext, is } from '../common'
+import { $, count, every, filter, find, findWithContext, first, flatten, forEach, getIn, inputLines, is, join, last, map, match, number, pipe, pluck, product, range, reduce, repeat, reverse, slice, some, split, values } from '../common'
 
 type Img = string[][]
 type Tile = {

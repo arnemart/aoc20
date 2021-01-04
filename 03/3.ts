@@ -1,4 +1,4 @@
-import { inputLines, chars, $, map, filter, reduce, pluck } from '../common'
+import { $, chars, filter, inputLines, map, pluck, reduce } from '../common'
 
 const input = $(inputLines(), map(chars), map(map(c => c == '#')))
 

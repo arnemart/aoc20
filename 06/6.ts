@@ -1,4 +1,4 @@
-import { inputLines, chars, pluck, $, map, sum, frequencies, values, count, intoSet } from '../common'
+import { $, chars, count, frequencies, inputLines, intoSet, map, pluck, sum, values } from '../common'
 
 const groups = inputLines(/\n\n/)
 

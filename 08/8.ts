@@ -1,4 +1,4 @@
-import { inputLines, $, map, filter, findWithContext, match } from '../common'
+import { $, filter, findWithContext, inputLines, map, match } from '../common'
 
 interface Instruction {
   type: 'acc' | 'jmp' | 'nop',

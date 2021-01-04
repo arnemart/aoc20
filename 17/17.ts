@@ -1,4 +1,4 @@
-import { $, cond, count, fillArray, filter, flatten, getIn, inputLines, is, map, pluck, range, repeat, split, within, memoize, reduce, add, pipe } from '../common'
+import { $, add, cond, count, fillArray, filter, flatten, getIn, inputLines, is, map, memoize, pipe, pluck, range, reduce, repeat, split, within } from '../common'
 
 interface Grid extends Array<Grid | string> {}
 

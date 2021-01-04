@@ -1,4 +1,4 @@
-import { inputLines, xor, within, chars, $, match, map, count } from '../common'
+import { $, chars, count, inputLines, map, match, within, xor } from '../common'
 
 interface Pw {
   min: number

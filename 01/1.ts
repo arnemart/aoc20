@@ -1,4 +1,4 @@
-import { inputLines, $, numbers, sortNumeric, slice, find, findWithContext, flatten, product } from '../common'
+import { $, find, findWithContext, flatten, inputLines, numbers, product, slice, sortNumeric } from '../common'
 
 const input = $(inputLines(), numbers(), sortNumeric())
 

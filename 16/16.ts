@@ -1,4 +1,4 @@
-import { $, every, filter, flatten, inputLines, length, map, not, numbers, pipe, pluck, product, range, slice, some, split, sum, within } from '../common'
+import { $, every, filter, flatten, inputLines, map, not, numbers, pipe, pluck, product, range, slice, some, split, sum, within } from '../common'
 
 type Rule = { name: string, validRanges: [number, number][] }
 type Ticket = number[]

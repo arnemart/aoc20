@@ -1,4 +1,4 @@
-import { inputLines, $, numbers, last, sortNumeric, zipWith, map, reduce, product } from '../common'
+import { $, inputLines, last, map, numbers, product, reduce, sortNumeric, zipWith } from '../common'
 
 const inputJoltages = $(inputLines(), numbers(), sortNumeric())
 const joltages = [...inputJoltages, $(inputJoltages, last) + 3]

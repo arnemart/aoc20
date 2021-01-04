@@ -1,4 +1,4 @@
-import { inputLines, $, numbers, slice, find, findWithContext, sum } from '../common'
+import { $, find, findWithContext, inputLines, numbers, slice, sum } from '../common'
 
 const input = $(inputLines(), numbers())
 

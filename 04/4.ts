@@ -1,4 +1,4 @@
-import { inputLines, within, $, pipe, map, filter, reduce, split, keys } from '../common'
+import { $, filter, inputLines, keys, map, pipe, reduce, split, within } from '../common'
 
 const checkHgt = (v: string): boolean => {
   const matches = v.match(/^(\d+)(in|cm)$/)

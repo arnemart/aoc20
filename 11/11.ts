@@ -1,4 +1,4 @@
-import { $, inputLines, map, getIn, cond, join, flatten, count, is, chars } from '../common'
+import { $, chars, cond, count, flatten, getIn, inputLines, is, join, map } from '../common'
 
 type Seat = ('L' | '#' | '.')
 type SeatMap = Seat[][]

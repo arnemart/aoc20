@@ -1,4 +1,4 @@
-import { $, inputLines, map, sum, numbers, pipe, replace } from '../common'
+import { $, inputLines, map, numbers, pipe, replace, sum } from '../common'
 
 const input = inputLines()
 
