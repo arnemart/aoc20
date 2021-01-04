@@ -1,4 +1,3 @@
-import { KeyObject } from 'crypto'
 import { readFileSync } from 'fs'
 
 process.chdir(require.main.path)
