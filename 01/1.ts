@@ -1,27 +1,9 @@
-import { $, find, findWithContext, flatten, inputLines, numbers, product, slice, sortNumeric } from '../common'
+import { $, find, inputLines, is, numbers, permute, pipe, product, sum } from '../common'
 
-const input = $(inputLines(), numbers(), sortNumeric())
+const input = $(inputLines(), numbers())
 
-const part1numbers = $(
-  input,
-  findWithContext((n, i) => {
-    const v = $(input, slice(i + 1), find(n2 => n + n2 == 2020))
-    return [v != null, v]
-  })
-)
+const part1: (a: number[]) => number = pipe(permute(2), find(pipe(sum, is(2020))), product)
+const part2: (a: number[]) => number = pipe(permute(3), find(pipe(sum, is(2020))), product)
 
-console.log('Part 1:', $(part1numbers, product))
-
-const part2numbers = $(
-  input,
-  findWithContext((n, i) => {
-    const v = $(input, slice(i + 1), findWithContext((n2, j) => {
-      const v2 = $(input, slice(j + 1), find(n3 => n + n2 + n3 == 2020))
-      return [v2 != null, v2]
-    }))
-    return [v != null, v]
-  }),
-  flatten()
-)
-
-console.log('Part 2:', $(part2numbers, product))
+console.log('Part 1:', $(input, part1))
+console.log('Part 2:', $(input, part2))

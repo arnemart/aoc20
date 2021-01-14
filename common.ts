@@ -31,8 +31,15 @@ export function $(v: any, ...fns: CF<any, any>[]) {
   return fns.filter(fn => fn != null).reduce((v, fn) => fn(v), v)
 }
 
-export function pipe(fn1?: CF<any, any>, fn2?: CF<any, any>, fn3?: CF<any, any>, fn4?: CF<any, any>, fn5?: CF<any, any>) {
-  return (v: any) => $(v, fn1, fn2, fn3, fn4, fn5)
+export function pipe<A, B>(fn1: CF<A, B>): (v: A) => B
+export function pipe<A, B, C>(fn1: CF<A, B>, fn2: CF<B, C>): (v: A) => C
+export function pipe<A, B, C, D>(fn1: CF<A, B>, fn2: CF<B, C>, fn3: CF<C, D>): (v: A) => D
+export function pipe<A, B, C, D, E>(fn1: CF<A, B>, fn2: CF<B, C>, fn3: CF<C, D>, fn4: CF<D, E>): (v: A) => E
+export function pipe<A, B, C, D, E, F>(fn1: CF<A, B>, fn2: CF<B, C>, fn3: CF<C, D>, fn4: CF<D, E>, fn5: CF<E, F>): (v: A) => F
+export function pipe<A, B, C, D, E, F, G>(fn1: CF<A, B>, fn2: CF<B, C>, fn3: CF<C, D>, fn4: CF<D, E>, fn5: CF<E, F>, fn6: CF<F, G>): (v: A) => G
+export function pipe<A, B, C, D, E, F, G, H>(fn1: CF<A, B>, fn2: CF<B, C>, fn3: CF<C, D>, fn4: CF<D, E>, fn5: CF<E, F>, fn6: CF<F, G>, fn7: CF<G, H>): (v: A) => H
+export function pipe<A>(...fns: CF<any, any>[]) {
+  return (v: A) => fns.filter(fn => fn != null).reduce((v, fn) => fn(v), v)
 }
 
 export const map    = <T, U>(fn: (v: T, i: number, arr: T[]) => U)       => (arr: T[]): U[]     => arr.map(fn)
@@ -126,3 +133,4 @@ export const not = <T>(fn: (v: T) => boolean) => (v: T): boolean => !fn(v)
 export const repeat = <T>(n: number, fn: (v: T) => T) => (v: T): T => $(range(n), reduce(v => fn(v), v))
 export const add = (n: number) => (v: number): number => n + v
 export const reverse = <T>(a: T[]): T[] => a.slice().reverse()
+export const permute = <T>(k: number) => (a: T[]): T[][] => k > 1 ? $(a, permute(k - 1), map(l => $(a, map(n => [...l, n]))), flatten()) : $(a, map(n => [n]))

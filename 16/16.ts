@@ -1,6 +1,6 @@
 import { $, every, filter, flatten, inputLines, map, not, numbers, pipe, pluck, product, range, slice, some, split, sum, within } from '../common'
 
-type Rule = { name: string, validRanges: [number, number][] }
+type Rule = { name: string, validRanges: number[][] }
 type Ticket = number[]
 
 const [rulesStr, yourTicketStr, nearbyTicketsStr] = inputLines(/\n\n/)
