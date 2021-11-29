@@ -12,7 +12,7 @@ const notASum = $(
 )
 
 const findRange = (list: number[], i: number, sumToFind: number, length = 1): number[] => {
-  const range = list.slice(i, i + length)
+  const range = $(list, slice(i, i + length))
   const rsum = $(range, sum)
   if (rsum < sumToFind) {
     return findRange(list, i, sumToFind, length + 1)

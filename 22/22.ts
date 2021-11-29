@@ -15,7 +15,7 @@ const score = (deck: Deck): number => $(deck, reverse, zipWith(range(1, deck.len
 
 console.log('Part 1:', $(decks, play, scores => Math.max(...scores)))
 
-const roundToString = (d: Decks) => $(d, map(join(',')), join('-'))
+const roundToString = pipe(map(join(',')), join('-'))
 
 const playRecursive = ([d1, d2]: Decks, prevRounds = new Set<string>()): [boolean, Decks] => {
   if (d1.length == 0 || d2.length == 0) {

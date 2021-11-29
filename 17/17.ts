@@ -1,4 +1,4 @@
-import { $, add, cond, count, fillArray, filter, flatten, getIn, inputLines, is, map, memoize, pipe, pluck, range, reduce, repeat, split, within } from '../common'
+import { $, add, cond, count, fillArray, filter, flatten, getIn, inputLines, is, length, map, memoize, pipe, pluck, range, reduce, repeat, split, within } from '../common'
 
 interface Grid extends Array<Grid | string> {}
 
@@ -39,7 +39,7 @@ const expand = (grid: Grid): Grid => {
   ]
 }
 
-const countActiveNeighbours = (grid: Grid, initialCoords: number[]): number => $(neighbours(initialCoords.length),
+const countActiveNeighbours = (grid: Grid, initialCoords: number[]): number => $(initialCoords, length, neighbours,
   map(map((n, i) => initialCoords[i] + n)), count(coords => $(grid, getIn(...coords), is('#'))))
 
 const alive = (cell: string, activeNeigbours: number) => $(cell,
@@ -48,16 +48,15 @@ const alive = (cell: string, activeNeigbours: number) => $(cell,
     ['.', activeNeigbours == 3 ? '#' : '.']
   ]))
 
-const step = (initialGrid: Grid): Grid => {
-  const expandedGrid = expand(initialGrid)
-  const recur = (grid: Grid, coords: number[] = []): Grid => countDimensions(grid) <= 1 ?
-    $(grid, map((cell: string, c) => alive(cell, countActiveNeighbours(expandedGrid, [...coords, c])))) :
-    $(grid, map((part: Grid, c) => recur(part, [...coords, c])))
+const recur = (grid: Grid, expandedGrid = grid, coords: number[] = []): Grid => countDimensions(grid) <= 1 ?
+  $(grid, map((cell: string, c) => alive(cell, countActiveNeighbours(expandedGrid, [...coords, c])))) :
+  $(grid, map((part: Grid, c) => recur(part, expandedGrid, [...coords, c])))
 
-  return recur(expandedGrid)
-}
+const step = pipe(expand, recur)
 
-const countAllActive = (grid: Grid): number => $(grid, flatten(Infinity), count(is('#')))
+const countAllActive = pipe(flatten(Infinity), count(is('#')))
 
-console.log('Part 1:', $(initialState, repeat(6, step), countAllActive))
-console.log('Part 2:', $(initialState4d, repeat(6, step), countAllActive))
+const runGame = pipe(repeat(6, step), countAllActive)
+
+console.log('Part 1:', $(initialState, runGame))
+console.log('Part 2:', $(initialState4d, runGame))

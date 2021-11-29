@@ -37,7 +37,7 @@ const tiles: Tile[] = $(inputLines(/\n\n/), map(split(/\n/)), map(lines => ({
 
 console.log('Part 1:', $(tiles, filter(t => t.matchCount == 2), map(pluck('id')), product))
 
-const flipImg = (img: Img) => $(img, map(reverse))
+const flipImg = map(reverse)
 const flip = (tile: Tile): Tile => ({
   ...tile,
   img: flipImg(tile.img)
@@ -88,17 +88,15 @@ const topLeft = $(tileMap, values, find(t => t.matches[0] == null && t.matches[3
 const buildRow = (t: Tile, row: number[] = [t.id]): number[] => t.matches[1] == null ? row :
   buildRow(tileMap[t.matches[1]], [...row, t.matches[1]])
 
-const buildGrid = (t: Tile, grid: number[][] = []): number[][] => {
-  const row = buildRow(t)
-  if (t.matches[2] != null) {
-    return buildGrid(tileMap[t.matches[2]], [...grid, row])
-  }
-  return [...grid, row]
-}
+const buildGrid = (t: Tile, grid: number[][] = []): number[][] => $(t,
+  buildRow,
+  row => t.matches[2] != null
+    ? buildGrid(tileMap[t.matches[2]], [...grid, row])
+    : [...grid, row])
 
-const trimImg = (img: Img): Img => $(img, slice(1, -1), map(slice(1, -1)))
+const trimImg = pipe(slice(1, -1), map(slice(1, -1)))
 
-const buildImage = (grid: number[][]): Img => $(grid,
+const buildImage = pipe(
   map(pipe(
     map((id: number) => tileMap[id]),
     map(pipe(pluck('img'), trimImg)),
@@ -133,6 +131,4 @@ const putSeaMonsterInImg = (img: Img, dirs = 0) => {
   return putSeaMonsterInImg(nextImg, dirs + 1)
 }
 
-const imgWithSeaMonster = putSeaMonsterInImg(img)
-
-console.log('Part 2:', $(imgWithSeaMonster, flatten(), count(is('#'))))
+console.log('Part 2:', $(img, putSeaMonsterInImg, flatten(), count(is('#'))))

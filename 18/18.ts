@@ -14,10 +14,14 @@ const replaceParens = (calcFn: (s: string) => string) => (line: string): string 
   replaceParens(calcFn)($(line, replace(parenReg, (_, match) => calcFn(match)))) :
   calcFn(line)
 
-console.log('Part 1:', $(input, map(replaceParens(calculateFromLeft)), numbers(), sum))
+const part1 = pipe(map(replaceParens(calculateFromLeft)), numbers(), sum)
+
+console.log('Part 1:', $(input, part1))
 
 const calculatePlusFirst = (line: string): string => plusReg.test(line) ?
   calculatePlusFirst(line.replace(plusReg, eval)) :
   line
 
-console.log('Part 2:', $(input, map(replaceParens(pipe(calculatePlusFirst, calculateFromLeft))), numbers(), sum))
+const part2 = pipe(map(replaceParens(pipe(calculatePlusFirst, calculateFromLeft))), numbers(), sum)
+
+console.log('Part 2:', $(input, part2))

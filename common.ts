@@ -6,7 +6,9 @@ export const inputLines = (splitWith: string | RegExp = /\n/) => readFileSync('i
 
 export const xor = (a: boolean, b: boolean) => (a && !b) || (!a && b)
 export const fillArray = <T>(n: number, v: T = null): T[] => Array.from(Array(n)).map(_ => v)
-export const range = (n1: number, n2?: number) => n2 == undefined ? fillArray(n1).map((_, i) => i) : fillArray(n2 - n1).map((_, i) => i + n1)
+export const range = (n1: number, n2?: number) => n2 == undefined
+  ? fillArray(n1).map((_, i) => i)
+  : fillArray(n2 - n1).map((_, i) => i + n1)
 
 export const memoize = <A, B>(fn: (v: A) => B) => {
   const memos = new Map<A, B>()
@@ -42,13 +44,16 @@ export function pipe<A>(...fns: CF<any, any>[]) {
   return (v: A) => fns.filter(fn => fn != null).reduce((v, fn) => fn(v), v)
 }
 
-export const map    = <T, U>(fn: (v: T, i: number, arr: T[]) => U)       => (arr: T[]): U[]     => arr.map(fn)
-export const forEach   = <T>(fn: (v: T, i: number, arr: T[]) => void)    => (arr: T[]): void    => arr.forEach(fn)
-export const filter    = <T>(fn: (v: T, i: number, arr: T[]) => boolean) => (arr: T[]): T[]     => arr.filter(fn)
-export const some      = <T>(fn: (v: T, i: number, arr: T[]) => boolean) => (arr: T[]): boolean => arr.some(fn)
-export const every     = <T>(fn: (v: T, i: number, arr: T[]) => boolean) => (arr: T[]): boolean => arr.every(fn)
+type MapFn<T, U> = (v: T, i: number, arr: T[]) => U
+
+export const map    = <T, U>(fn: MapFn<T, U>)       => (arr: T[]): U[]     => arr.map(fn)
+export const forEach   = <T>(fn: MapFn<T, void>)    => (arr: T[]): void    => arr.forEach(fn)
+export const filter    = <T>(fn: MapFn<T, boolean>) => (arr: T[]): T[]     => arr.filter(fn)
+export const some      = <T>(fn: MapFn<T, boolean>) => (arr: T[]): boolean => arr.some(fn)
+export const every     = <T>(fn: MapFn<T, boolean>) => (arr: T[]): boolean => arr.every(fn)
+export const find      = <T>(fn: MapFn<T, boolean>) => (arr: T[]): T       => arr.find(fn)
+export const includes  = <T>(v: T)                  => (arr: T[]): boolean => arr.includes(v)
 export const reduce = <T, U>(fn: (agg: U, val: T, i: number, arr: T[]) => U, init: U) => (arr: T[]): U => arr.reduce(fn, init)
-export const find      = <T>(fn: (v: T, i: number, arr: T[]) => boolean) => (arr: T[]): T => arr.find(fn)
 export const findWithContext = <T, U>(callback: (value: T, i: number) => [found: boolean, context: U]) => (arr: T[]): [value: T, context: U] | undefined => {
   for (const {v, i} of $(arr, map((v, i) => ({v, i})))) {
     const [found, context] = callback(v, i)
@@ -65,13 +70,11 @@ export const first = <T>(arr: T[]): T => arr[0]
 export const last = <T>(arr: T[]): T => arr[arr.length - 1]
 export const numbers = (radix: number = 10) => (arr: string[]): number[] => arr.map(s => parseInt(s, radix))
 export const number = (radix: number = 10) => (s: string): number => parseInt(s, radix)
+export const int = (s: string): number => parseInt(s, 10)
 export const length = <T>(arr: T[]): number => arr.length
 export const next = <T>(i: number, amt: number = 1) => (arr: T[]): T => arr[(i + arr.length + (amt % arr.length)) % arr.length]
 export const count = <T>(fn: (v: T) => boolean) => (arr: T[]) => arr.filter(fn).length
-export const within = (min: number, max: number) => (num: string | number): boolean => {
-  const n = typeof num == 'number' ? num : parseInt(num, 10)
-  return n != null && n >= min && n <= max
-}
+export const within = (min: number, max: number) => (n: number): boolean =>  n != null && n >= min && n <= max
 export const chars = (s: string) => s.replace(/\n/g, '').split('')
 export const pluck = <T, K extends keyof T>(key: K) => (o: T) => o[key]
 export const sort = <T>(fn?: (a: T, b: T) => number) => (arr: T[]): T[] => fn ? arr.sort(fn) : arr.sort()
@@ -123,7 +126,7 @@ export const cond = <T, U>(o: [T | T[], U | ((v: T) => U)][], def?: U) => (v: T)
 }
 export const is = <T>(...v: T[]) => cond([[v, true]], false)
 export const join = <T>(joinWith: string = '') => (arr: T[]): string => arr.join(joinWith)
-export const spyWith = <T>(fn: (v: T) => any) => (v: T): T => {
+export const spyWith = <T>(fn: (v: T) => unknown) => (v: T): T => {
   fn(v)
   return v
 }
@@ -133,4 +136,11 @@ export const not = <T>(fn: (v: T) => boolean) => (v: T): boolean => !fn(v)
 export const repeat = <T>(n: number, fn: (v: T) => T) => (v: T): T => $(range(n), reduce(v => fn(v), v))
 export const add = (n: number) => (v: number): number => n + v
 export const reverse = <T>(a: T[]): T[] => a.slice().reverse()
-export const permute = <T>(k: number) => (a: T[]): T[][] => k > 1 ? $(a, permute(k - 1), map(l => $(a, map(n => [...l, n]))), flatten()) : $(a, map(n => [n]))
+
+export const combinations = <T>(k: number) => (a: T[]): T[][] =>
+  k > 1
+    ? $(a,
+        combinations(k - 1),
+        map(l => $(a, map(n => [...l, n]))),
+        flatten())
+    : $(a, map(n => [n]))
