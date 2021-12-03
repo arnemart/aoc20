@@ -1,8 +1,0 @@
-{
-  "devDependencies": {
-    "@types/node": "^16.11.10"
-  },
-  "dependencies": {
-    "ts-node": "^10.4.0"
-  }
-}
